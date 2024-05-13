@@ -39,10 +39,12 @@ class JWTProviderTest {
     @Test
     void 생성_후_30분이_지난_token_전달시_예외가_발생한다() {
         // given
-        mockClockTo("2024-05-13T10:00:00Z");
+        Instant now = LocalDateTime.now().toInstant(ZoneOffset.UTC);
+        mockClockTo(now.minusSeconds(60 * 30).toString());
 
         // when
         String accessToken = jwtProvider.buildAccessToken(1);
+        doNotMockClock();
 
         // then
         assertThatThrownBy(() -> jwtProvider.parseAccessToken(accessToken))

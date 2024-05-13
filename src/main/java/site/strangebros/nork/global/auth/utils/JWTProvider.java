@@ -62,6 +62,7 @@ public class JWTProvider implements InitializingBean {
         try {
             payload = Jwts.parser()
                     .verifyWith(key)
+                    .clock(() -> Date.from(clock.instant()))
                     .build()
                     .parseSignedClaims(token)
                     .getPayload();
