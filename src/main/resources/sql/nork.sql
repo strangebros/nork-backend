@@ -34,7 +34,6 @@ CREATE TABLE `member`
     `nickname`     varchar(40) NULL,
     `birthdate`    date NULL,
     `position`     varchar(20) NULL,
-    `workspace_id` int NOT NULL,
     CONSTRAINT `PK_MEMBER` PRIMARY KEY (`id`)
 );
 
@@ -68,8 +67,10 @@ CREATE TABLE `review_keyword`
 (
     `id`         int NOT NULL,
     `keyword_id` int NOT NULL,
+    `visited_review_id` int NOT NULL,
     CONSTRAINT `PK_REVIEW_KEYWORD` PRIMARY KEY (`id`),
-    CONSTRAINT `FK_keyword_TO_review_keyword_1` FOREIGN KEY (`keyword_id`) REFERENCES `keyword` (`id`)
+    CONSTRAINT `FK_keyword_TO_review_keyword_1` FOREIGN KEY (`keyword_id`) REFERENCES `keyword` (`id`),
+    CONSTRAINT `FK_visited_review_TO_review_keyword_1` FOREIGN KEY (`visited_review_id`) REFERENCES `visited_review` (`id`)
 );
 
 CREATE TABLE `reservation`
@@ -89,8 +90,8 @@ CREATE TABLE `reservation`
 CREATE TABLE `visited_review_image`
 (
     `id`        int NOT NULL,
-    `review_id` int NOT NULL,
+    `visited_review_id` int NOT NULL,
     `image_url` varchar(255) NULL,
     CONSTRAINT `PK_VISITED_REVIEW_IMAGE` PRIMARY KEY (`id`),
-    CONSTRAINT `FK_visited_review_TO_visited_review_image_1` FOREIGN KEY (`review_id`) REFERENCES `visited_review` (`id`)
+    CONSTRAINT `FK_visited_review_TO_visited_review_image_1` FOREIGN KEY (`visited_review_id`) REFERENCES `visited_review` (`id`)
 );
