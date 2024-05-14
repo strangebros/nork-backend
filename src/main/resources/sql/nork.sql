@@ -9,8 +9,11 @@ CREATE TABLE `workspace`
 (
     `id`                 int NOT NULL,
     `name`               varchar(40) NULL,
+    `category`           varchar(20) NULL,
     `latitude`           decimal(20, 17) NULL,
     `longitude`          decimal(20, 17) NULL,
+    `road_address`       varchar(100) NULL,
+    `image_url`          varchar(255) NULL,
     `rating`             decimal(3, 1) NULL,
     `number_of_visitors` int NULL,
     CONSTRAINT `PK_WORKSPACE` PRIMARY KEY (`id`)
@@ -28,12 +31,12 @@ CREATE TABLE `workspace_keyword`
 
 CREATE TABLE `member`
 (
-    `id`           int NOT NULL,
-    `email`        varchar(40) NULL,
-    `password`     varchar(40) NULL,
-    `nickname`     varchar(40) NULL,
-    `birthdate`    date NULL,
-    `position`     varchar(20) NULL,
+    `id`        int NOT NULL,
+    `email`     varchar(40) NULL,
+    `password`  varchar(40) NULL,
+    `nickname`  varchar(40) NULL,
+    `birthdate` date NULL,
+    `position`  varchar(20) NULL,
     CONSTRAINT `PK_MEMBER` PRIMARY KEY (`id`)
 );
 
@@ -65,8 +68,8 @@ CREATE TABLE `visited_review`
 
 CREATE TABLE `review_keyword`
 (
-    `id`         int NOT NULL,
-    `keyword_id` int NOT NULL,
+    `id`                int NOT NULL,
+    `keyword_id`        int NOT NULL,
     `visited_review_id` int NOT NULL,
     CONSTRAINT `PK_REVIEW_KEYWORD` PRIMARY KEY (`id`),
     CONSTRAINT `FK_keyword_TO_review_keyword_1` FOREIGN KEY (`keyword_id`) REFERENCES `keyword` (`id`),
@@ -89,9 +92,9 @@ CREATE TABLE `reservation`
 
 CREATE TABLE `visited_review_image`
 (
-    `id`        int NOT NULL,
+    `id`                int NOT NULL,
     `visited_review_id` int NOT NULL,
-    `image_url` varchar(255) NULL,
+    `image_url`         varchar(255) NULL,
     CONSTRAINT `PK_VISITED_REVIEW_IMAGE` PRIMARY KEY (`id`),
     CONSTRAINT `FK_visited_review_TO_visited_review_image_1` FOREIGN KEY (`visited_review_id`) REFERENCES `visited_review` (`id`)
 );
