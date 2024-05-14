@@ -7,7 +7,7 @@ CREATE TABLE `keyword`
 
 CREATE TABLE `workspace`
 (
-    `id`                 int NOT NULL,
+    `id`                 int          NOT NULL,
     `name`               varchar(40) NULL,
     `category`           varchar(20) NULL,
     `latitude`           decimal(20, 17) NULL,
@@ -16,6 +16,7 @@ CREATE TABLE `workspace`
     `image_url`          varchar(255) NULL,
     `rating`             decimal(3, 1) NULL,
     `number_of_visitors` int NULL,
+    `poi_id`             varchar(100) NOT NULL,
     CONSTRAINT `PK_WORKSPACE` PRIMARY KEY (`id`)
 );
 
