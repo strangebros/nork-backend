@@ -6,5 +6,5 @@ import site.strangebros.nork.domain.workspace.entity.Workspace;
 
 @Mapper
 public interface WorkspaceMapper {
-    Workspace findAllByPoiIds(List<String> poiIds);
+    List<Workspace> findAllByPoiIds(List<String> poiIds);
 }

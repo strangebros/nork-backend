@@ -1,8 +1,14 @@
 package site.strangebros.nork.domain.workspace.entity;
 
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import site.strangebros.nork.domain.keyword.entity.Keyword;
 
+@NoArgsConstructor
+@ToString
 @Getter
 public class Workspace {
     private int id;
@@ -16,9 +22,11 @@ public class Workspace {
     private Integer numberOfVisitors;
     private String poiId;
 
+    private List<Keyword> keywords;
+
     @Builder
     public Workspace(int id, String name, String category, Double latitude, Double longitude, String roadAddress,
-                     String imageUrl, Double rating, Integer numberOfVisitors, String poiId) {
+                     String imageUrl, Double rating, Integer numberOfVisitors, String poiId, List<Keyword> keywords) {
         this.id = id;
         this.name = name;
         this.category = category;
@@ -29,5 +37,6 @@ public class Workspace {
         this.rating = rating;
         this.numberOfVisitors = numberOfVisitors;
         this.poiId = poiId;
+        this.keywords = keywords;
     }
 }
