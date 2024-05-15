@@ -1,5 +1,11 @@
 package site.strangebros.nork.domain.member.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import site.strangebros.nork.domain.member.service.dto.request.LoginRequest;
 import site.strangebros.nork.domain.member.service.dto.response.LoginResponse;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import site.strangebros.nork.global.web.dto.response.SuccessResponse;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -44,12 +45,14 @@ public class MemberControllerTest {
                 .andExpect(status().isOk())
                 .andReturn().getResponse();
 
-        LoginResponse loginResponse = objectMapper.readValue(response.getContentAsString(), LoginResponse.class);
-        assertThat(loginResponse.getAccessToken()).isNotEmpty();
+        SuccessResponse<LoginResponse> successResponse = objectMapper.readValue(response.getContentAsString(),
+                new TypeReference<>() {
+                });
+        assertThat(successResponse.getData().getAccessToken()).isNotEmpty();
     }
 
     @Test
-    public void 비밀번호를_입력하면_encoding된_코드를_반환한다() throws Exception{
+    public void 비밀번호를_입력하면_encoding된_코드를_반환한다() throws Exception {
         System.out.println(passwordEncoder.encode("hjx66"));
     }
 
