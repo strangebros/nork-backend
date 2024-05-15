@@ -2,9 +2,11 @@ package site.strangebros.nork.global.web.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
+@NoArgsConstructor
 @Setter
 @Getter
 public class SuccessResponse<D> {
