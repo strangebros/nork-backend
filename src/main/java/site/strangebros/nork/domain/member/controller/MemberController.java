@@ -9,7 +9,9 @@ import site.strangebros.nork.domain.member.mapper.MemberMapper;
 import site.strangebros.nork.domain.member.service.MemberService;
 import site.strangebros.nork.domain.member.service.dto.request.LoginRequest;
 import site.strangebros.nork.domain.member.service.dto.response.LoginResponse;
+
 import site.strangebros.nork.global.auth.config.CurrentMember;
+import site.strangebros.nork.global.web.dto.response.SuccessResponse;
 
 @RestController
 @RequestMapping("/members")
@@ -22,10 +24,10 @@ public class MemberController {
 
     // 로그인
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+    public SuccessResponse<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
         LoginResponse loginResponse = memberService.login(loginRequest);
 
-        return ResponseEntity.ok(loginResponse);
+        return SuccessResponse.ok(loginResponse);
     }
 
     // 유저 정보 조회를 위한 임시 메서드
