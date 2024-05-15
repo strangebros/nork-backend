@@ -17,14 +17,20 @@ public class SearchWorkspaceRequest {
     private String category;
     private List<String> keywords;
 
+    // pagination
+    private int page;
+    private int count;
+
     @Builder
     public SearchWorkspaceRequest(String query, Double latitude, Double longitude, int radius, String category,
-                                  List<String> keywords) {
+                                  List<String> keywords, int page, int count) {
         this.query = query;
         this.latitude = latitude;
         this.longitude = longitude;
         this.radius = radius;
         this.category = category;
         this.keywords = keywords;
+        this.page = page;
+        this.count = count;
     }
 }
