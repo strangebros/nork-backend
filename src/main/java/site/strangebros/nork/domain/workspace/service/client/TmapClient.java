@@ -56,7 +56,7 @@ public class TmapClient {
     @Setter
     @Getter
     @ToString
-    static class Request {
+    public static class Request {
         private final String version = "1";
         private final String searchtypCd = "R"; // 거리순
 
@@ -95,7 +95,7 @@ public class TmapClient {
     @Setter
     @Builder
     @ToString
-    static class Response {
+    public static class Response {
         private String id; // poi id
         private String name;
         private String noorLat; // 위도
