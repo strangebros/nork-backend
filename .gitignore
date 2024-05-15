@@ -35,3 +35,4 @@ build/
 ### Security ###
 src/main/resources/application-local.properties
 src/main/resources/application-real.properties
+src/main/resources/application-test.properties
