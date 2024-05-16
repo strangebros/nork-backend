@@ -1,5 +1,6 @@
 package site.strangebros.nork.domain.workspace.entity;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,10 +24,12 @@ public class Workspace {
     private String poiId;
 
     private List<Keyword> keywords;
+    private LocalDateTime recentVisitDatetime;
 
     @Builder
     public Workspace(int id, String name, String category, Double latitude, Double longitude, String roadAddress,
-                     String imageUrl, Double rating, Integer numberOfVisitors, String poiId, List<Keyword> keywords) {
+                     String imageUrl, Double rating, Integer numberOfVisitors, String poiId, List<Keyword> keywords,
+                     LocalDateTime recentVisitDatetime) {
         this.id = id;
         this.name = name;
         this.category = category;
@@ -38,5 +41,6 @@ public class Workspace {
         this.numberOfVisitors = numberOfVisitors;
         this.poiId = poiId;
         this.keywords = keywords;
+        this.recentVisitDatetime = recentVisitDatetime;
     }
 }
