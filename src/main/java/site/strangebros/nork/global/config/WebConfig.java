@@ -8,6 +8,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import site.strangebros.nork.global.auth.config.RoleAuthenticationInterceptor;
 import site.strangebros.nork.global.auth.config.AuthorizationInterceptor;
 import site.strangebros.nork.global.auth.config.MemberArgumentResolver;
 
@@ -25,8 +26,13 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authorizationInterceptor)
+                .order(1)
                 .addPathPatterns("/**")
                 .excludePathPatterns("/members/login","/members/signUp");
+        registry.addInterceptor(new RoleAuthenticationInterceptor())
+                .order(2)
+                .addPathPatterns("/**")
+                .excludePathPatterns("/members/login","/members/signUp", "/workspaces/search");
     }
 
     @Override
