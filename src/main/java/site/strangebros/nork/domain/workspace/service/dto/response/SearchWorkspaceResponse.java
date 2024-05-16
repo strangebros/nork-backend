@@ -7,6 +7,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import site.strangebros.nork.domain.keyword.entity.Keyword;
+import site.strangebros.nork.domain.workspace.entity.Workspace;
+import site.strangebros.nork.domain.workspace.service.client.TmapClient;
 
 @NoArgsConstructor
 @Setter
@@ -46,5 +49,35 @@ public class SearchWorkspaceResponse {
         this.currentWorkers = currentWorkers;
         this.recentVisitedDate = recentVisitedDate;
         this.keywords = keywords;
+    }
+
+    public static SearchWorkspaceResponse buildWithoutWorkspace(TmapClient.Response poiResponse) {
+        return SearchWorkspaceResponse.builder()
+                .poiId(poiResponse.getId())
+                .name(poiResponse.getName())
+                .latitude(Double.valueOf(poiResponse.getLatitude()))
+                .longitude(Double.valueOf(poiResponse.getLongitude()))
+                .roadAddress(poiResponse.getRoadAddress())
+                .category(poiResponse.getCategory())
+                .isWorkspaceInDatabase(false)
+                .build();
+    }
+
+    // TODO 응답에 currentWorkers 추가 필요
+    public static SearchWorkspaceResponse buildWithWorkspace(TmapClient.Response poiResponse, Workspace workspace) {
+        return SearchWorkspaceResponse.builder()
+                .poiId(poiResponse.getId())
+                .name(poiResponse.getName())
+                .latitude(Double.valueOf(poiResponse.getLatitude()))
+                .longitude(Double.valueOf(poiResponse.getLongitude()))
+                .roadAddress(poiResponse.getRoadAddress())
+                .category(poiResponse.getCategory())
+                .isWorkspaceInDatabase(true)
+                .id(workspace.getId())
+                .imageUrl(workspace.getImageUrl())
+                .rating(workspace.getRating())
+                .recentVisitedDate(workspace.getRecentVisitDatetime())
+                .keywords(workspace.getKeywords().stream().map(Keyword::getValue).toList())
+                .build();
     }
 }
