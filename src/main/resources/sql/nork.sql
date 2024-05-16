@@ -70,16 +70,15 @@ create table visited_space
 
 create table visited_review
 (
-    id           int auto_increment
+    id             int auto_increment
         primary key,
-    member_id    int           not null,
-    workspace_id int           not null,
-    visit_date   date          not null,
-    start_time   time          null,
-    end_time     time          null,
-    activity     varchar(255)  null,
-    rating       decimal(3, 1) null,
-    review_text  text          null,
+    member_id      int           not null,
+    workspace_id   int           not null,
+    start_datetime datetime      not null,
+    end_datetime   datetime      not null,
+    activity       varchar(255)  null,
+    rating         decimal(3, 1) null,
+    review_text    text          null,
     constraint FK_member_TO_visited_review_1
         foreign key (member_id) references member (id),
     constraint FK_workspace_TO_visited_review_1
@@ -104,7 +103,7 @@ create table reservation
         primary key,
     member_id         int          not null,
     workspace_id      int          not null,
-    visit_date        date         null,
+    visit_start_date  date         not null,
     visit_timeslot    varchar(10)  null,
     activity          varchar(255) null,
     activity_duration int          null,
