@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="site.strangebros.nork.domain.reservation.mapper.ReservationMapper">
+    <insert id="create" parameterType="reservation">
+        insert into reservation
+            (member_id, workspace_id, visit_start_date, visit_timeslot, activity, activity_duration)
+        values
+            (#{memberId}, #{workspaceId}, #{visitStartDate}, #{visitTimeslot}, #{activity}, #{activityDuration})
+    </insert>
+    
+    <select id="findByMemberIdAndWorkspaceId" resultType="reservation">
+        select id, member_id, workspace_id, visit_start_date, visit_timeslot, activity, activity_duration
+        from reservation
+        where member_id = #{memberId}
+        and workspace_id = #{workspaceId}
+    </select>
+</mapper>
