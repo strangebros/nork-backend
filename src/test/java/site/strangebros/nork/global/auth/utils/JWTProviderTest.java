@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import site.strangebros.nork.domain.member.entity.MemberRole;
+import site.strangebros.nork.global.auth.dto.MemberAuthority;
 import site.strangebros.nork.global.auth.exception.InvalidJWTException;
 
 @SpringBootTest
@@ -30,10 +32,12 @@ class JWTProviderTest {
         doNotMockClock();
 
         // when
-        String accessToken = jwtProvider.buildAccessToken(1);
+        String accessToken = jwtProvider.buildAccessToken(
+                MemberAuthority.builder().id(1).role(MemberRole.MEMBER).build()
+        );
 
         // then
-        assertThat(jwtProvider.parseAccessToken(accessToken)).isEqualTo(1);
+        assertThat(jwtProvider.parseAccessToken(accessToken).getId()).isEqualTo(1);
     }
 
     @Test
@@ -43,7 +47,9 @@ class JWTProviderTest {
         mockClockTo(now.minusSeconds(60 * 30).toString());
 
         // when
-        String accessToken = jwtProvider.buildAccessToken(1);
+        String accessToken = jwtProvider.buildAccessToken(
+                MemberAuthority.builder().id(1).role(MemberRole.MEMBER).build()
+        );
         doNotMockClock();
 
         // then
@@ -57,7 +63,9 @@ class JWTProviderTest {
         doNotMockClock();
 
         // when
-        String accessToken = jwtProvider.buildAccessToken(1);
+        String accessToken = jwtProvider.buildAccessToken(
+                MemberAuthority.builder().id(1).role(MemberRole.MEMBER).build()
+        );
         String invalidAccessToken = "b" + accessToken + "a";
 
         // then

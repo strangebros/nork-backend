@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import site.strangebros.nork.domain.member.service.MemberService;
 import site.strangebros.nork.domain.member.service.dto.request.LoginRequest;
+import site.strangebros.nork.global.auth.dto.MemberAuthority;
 import site.strangebros.nork.global.auth.utils.JWTProvider;
 
 import static org.apache.tomcat.websocket.Constants.AUTHORIZATION_HEADER_NAME;
@@ -31,8 +32,8 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             throw new IllegalArgumentException("로그인이 필요한 서비스입니다. 로그인 후 진행해 주세요.");
         }
 
-        int memberId = jwtProvider.parseAccessToken(authorizationHeader.substring(TOKEN_TYPE.length()+1));
-        request.setAttribute("memberId", memberId);
+        MemberAuthority authority = jwtProvider.parseAccessToken(authorizationHeader.substring(TOKEN_TYPE.length()+1));
+        request.setAttribute("authority", authority);
 
         return true;
     }

@@ -7,6 +7,7 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import site.strangebros.nork.domain.member.entity.Member;
+import site.strangebros.nork.global.auth.dto.MemberAuthority;
 
 public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
 
@@ -17,6 +18,7 @@ public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public Integer resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        return (Integer) webRequest.getAttribute("memberId", RequestAttributes.SCOPE_REQUEST);
+        MemberAuthority authority = (MemberAuthority) webRequest.getAttribute("authority", RequestAttributes.SCOPE_REQUEST);
+        return authority.getId();
     }
 }
