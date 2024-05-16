@@ -45,6 +45,7 @@ create table member
     birthdate     date         null,
     position      varchar(20)  null,
     profile_image mediumtext   null,
+    role          varchar(20)  not null,
     constraint idx_email
         unique (email),
     constraint idx_nickname
