@@ -15,8 +15,11 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
+import site.strangebros.nork.domain.member.entity.MemberRole;
 import site.strangebros.nork.domain.member.service.dto.request.LoginRequest;
 import site.strangebros.nork.domain.member.service.dto.response.LoginResponse;
+import site.strangebros.nork.global.auth.dto.MemberAuthority;
+import site.strangebros.nork.global.auth.utils.JWTProvider;
 import site.strangebros.nork.global.web.dto.response.SuccessResponse;
 
 @SpringBootTest
@@ -31,6 +34,9 @@ public class MemberControllerTest {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JWTProvider jwtProvider;
 
     @Test
     public void 올바른_id와_비밀번호를_넣을시_ResponseEntity가_반환된다() throws Exception {
@@ -68,5 +74,21 @@ public class MemberControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andDo(print());
+    }
+
+    @Test
+    void guestLogin_요청_시_GUEST_role_token이_반환된다() throws Exception {
+        MockHttpServletResponse response = mvc.perform(post("/members/guest-login")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn().getResponse();
+
+        SuccessResponse<LoginResponse> successResponse = objectMapper.readValue(response.getContentAsString(),
+                new TypeReference<>() {
+                });
+
+        MemberAuthority authority = jwtProvider.parseAccessToken(successResponse.getData().getAccessToken());
+        assertThat(authority.getRole()).isSameAs(MemberRole.GUEST);
     }
 }

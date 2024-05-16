@@ -73,4 +73,15 @@ public class MemberService {
     }
 
 
+    public LoginResponse guestLogin() {
+        Member member = memberMapper.findByEmail(MemberRole.GUEST.name().toLowerCase());
+
+        return LoginResponse.builder()
+                .accessToken(
+                        jwtProvider.buildAccessToken(MemberAuthority.builder()
+                                .id(member.getId())
+                                .role(MemberRole.GUEST)
+                                .build())
+                ).build();
+    }
 }

@@ -22,8 +22,6 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    private final MemberMapper memberMapper;
-
     //회원가입
     @PostMapping("/signUp")
     public SuccessResponse<SignUpResponse> signUp(@RequestBody SignUpRequest signUpRequest) {
@@ -32,11 +30,18 @@ public class MemberController {
         return SuccessResponse.ok(signUpResponse);
     }
 
-
     // 로그인
     @PostMapping("/login")
     public SuccessResponse<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
         LoginResponse loginResponse = memberService.login(loginRequest);
+
+        return SuccessResponse.ok(loginResponse);
+    }
+
+    // GUEST 로그인
+    @PostMapping("/guest-login")
+    public SuccessResponse<LoginResponse> guestLogin() {
+        LoginResponse loginResponse = memberService.guestLogin();
 
         return SuccessResponse.ok(loginResponse);
     }

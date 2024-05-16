@@ -28,11 +28,11 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(authorizationInterceptor)
                 .order(1)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/members/login","/members/signUp");
+                .excludePathPatterns("/members/login","/members/signUp", "/members/guest-login");
         registry.addInterceptor(new RoleAuthenticationInterceptor())
                 .order(2)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/members/login","/members/signUp", "/workspaces/search");
+                .excludePathPatterns("/members/login","/members/signUp", "/members/guest-login", "/workspaces/search");
     }
 
     @Override
