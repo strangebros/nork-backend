@@ -1,101 +1,126 @@
-CREATE TABLE `keyword`
+create table keyword
 (
-    `id`    int NOT NULL,
-    `value` varchar(40) NULL,
-    CONSTRAINT `PK_KEYWORD` PRIMARY KEY (`id`)
+    id    int auto_increment
+        primary key,
+    value varchar(40) not null
 );
 
-CREATE TABLE `workspace`
+create table workspace
 (
-    `id`                 int          NOT NULL,
-    `name`               varchar(40) NULL,
-    `category`           varchar(20) NULL,
-    `latitude`           decimal(20, 17) NULL,
-    `longitude`          decimal(20, 17) NULL,
-    `road_address`       varchar(100) NULL,
-    `image_url`          varchar(255) NULL,
-    `rating`             decimal(3, 1) NULL,
-    `number_of_visitors` int NULL,
-    `poi_id`             varchar(100) NOT NULL,
-    CONSTRAINT `PK_WORKSPACE` PRIMARY KEY (`id`)
+    id                 int auto_increment
+        primary key,
+    name               varchar(40)     not null,
+    category           varchar(20)     not null,
+    latitude           decimal(20, 17) not null,
+    longitude          decimal(20, 17) not null,
+    road_address       varchar(100)    not null,
+    image_url          varchar(255)    null,
+    rating             decimal(3, 1)   null,
+    number_of_visitors int             null,
+    poi_id             varchar(100)    not null,
+    constraint idx_poi_id
+        unique (poi_id)
 );
 
-CREATE TABLE `workspace_keyword`
+
+create table workspace_keyword
 (
-    `id`           int NOT NULL,
-    `workspace_id` int NOT NULL,
-    `keyword_id`   int NOT NULL,
-    CONSTRAINT `PK_WORKSPACE_KEYWORD` PRIMARY KEY (`id`),
-    CONSTRAINT `FK_workspace_TO_workspace_keyword_1` FOREIGN KEY (`workspace_id`) REFERENCES `workspace` (`id`),
-    CONSTRAINT `FK_keyword_TO_workspace_keyword_1` FOREIGN KEY (`keyword_id`) REFERENCES `keyword` (`id`)
+    id           int auto_increment
+        primary key,
+    workspace_id int not null,
+    keyword_id   int not null,
+    constraint FK_keyword_TO_workspace_keyword_1
+        foreign key (keyword_id) references keyword (id),
+    constraint FK_workspace_TO_workspace_keyword_1
+        foreign key (workspace_id) references workspace (id)
 );
 
-CREATE TABLE `member`
+create table member
 (
-    `id`        int NOT NULL,
-    `email`     varchar(40) NULL,
-    `password`  varchar(40) NULL,
-    `nickname`  varchar(40) NULL,
-    `birthdate` date NULL,
-    `position`  varchar(20) NULL,
-    CONSTRAINT `PK_MEMBER` PRIMARY KEY (`id`)
+    id            int auto_increment
+        primary key,
+    email         varchar(40)  not null,
+    password      varchar(255) not null,
+    nickname      varchar(40)  not null,
+    birthdate     date         null,
+    position      varchar(20)  null,
+    profile_image mediumtext   null,
+    role          varchar(20)  not null,
+    constraint idx_email
+        unique (email),
+    constraint idx_nickname
+        unique (nickname)
 );
 
-CREATE TABLE `visited_space`
+create table visited_space
 (
-    `id`           int NOT NULL,
-    `member_id`    int NOT NULL,
-    `workspace_id` int NOT NULL,
-    `rating_sum`   decimal(3, 1) NULL,
-    `visit_count`  int NULL,
-    CONSTRAINT `PK_VISITED_SPACE` PRIMARY KEY (`id`),
-    CONSTRAINT `FK_member_TO_visited_space_1` FOREIGN KEY (`member_id`) REFERENCES `member` (`id`),
-    CONSTRAINT `FK_workspace_TO_visited_space_1` FOREIGN KEY (`workspace_id`) REFERENCES `workspace` (`id`)
+    id                    int auto_increment
+        primary key,
+    member_id             int           not null,
+    workspace_id          int           not null,
+    rating_sum            decimal(3, 1) null,
+    visit_count           int           not null,
+    recent_visit_datetime datetime      not null,
+    constraint FK_member_TO_visited_space_1
+        foreign key (member_id) references member (id),
+    constraint FK_workspace_TO_visited_space_1
+        foreign key (workspace_id) references workspace (id)
 );
 
-CREATE TABLE `visited_review`
+
+create table visited_review
 (
-    `id`               int NOT NULL,
-    `visited_space_id` int NOT NULL,
-    `visit_date`       date NULL,
-    `start_time`       time NULL,
-    `end_time`         time NULL,
-    `activities`       varchar(255) NULL,
-    `rating`           decimal(3, 1) NULL,
-    `review_text`      text NULL,
-    CONSTRAINT `PK_VISITED_REVIEW` PRIMARY KEY (`id`),
-    CONSTRAINT `FK_visited_space_TO_visited_review_1` FOREIGN KEY (`visited_space_id`) REFERENCES `visited_space` (`id`)
+    id           int auto_increment
+        primary key,
+    member_id    int           not null,
+    workspace_id int           not null,
+    visit_date   date          not null,
+    start_time   time          null,
+    end_time     time          null,
+    activity     varchar(255)  null,
+    rating       decimal(3, 1) null,
+    review_text  text          null,
+    constraint FK_member_TO_visited_review_1
+        foreign key (member_id) references member (id),
+    constraint FK_workspace_TO_visited_review_1
+        foreign key (workspace_id) references workspace (id)
 );
 
-CREATE TABLE `review_keyword`
+create table review_keyword
 (
-    `id`                int NOT NULL,
-    `keyword_id`        int NOT NULL,
-    `visited_review_id` int NOT NULL,
-    CONSTRAINT `PK_REVIEW_KEYWORD` PRIMARY KEY (`id`),
-    CONSTRAINT `FK_keyword_TO_review_keyword_1` FOREIGN KEY (`keyword_id`) REFERENCES `keyword` (`id`),
-    CONSTRAINT `FK_visited_review_TO_review_keyword_1` FOREIGN KEY (`visited_review_id`) REFERENCES `visited_review` (`id`)
+    id                int auto_increment
+        primary key,
+    keyword_id        int not null,
+    visited_review_id int not null,
+    constraint FK_keyword_TO_review_keyword_1
+        foreign key (keyword_id) references keyword (id),
+    constraint FK_visited_review_TO_review_keyword_1
+        foreign key (visited_review_id) references visited_review (id)
 );
 
-CREATE TABLE `reservation`
+create table reservation
 (
-    `id`                int NOT NULL,
-    `member_id`         int NOT NULL,
-    `workspace_id`      int NOT NULL,
-    `visit_date`        date NULL,
-    `visit_timeslot`    varchar(10) NULL,
-    `activity`          varchar(255) NULL,
-    `activity_duration` int NULL,
-    CONSTRAINT `PK_RESERVATION` PRIMARY KEY (`id`),
-    CONSTRAINT `FK_member_TO_reservation_1` FOREIGN KEY (`member_id`) REFERENCES `member` (`id`),
-    CONSTRAINT `FK_workspace_TO_reservation_1` FOREIGN KEY (`workspace_id`) REFERENCES `workspace` (`id`)
+    id                int auto_increment
+        primary key,
+    member_id         int          not null,
+    workspace_id      int          not null,
+    visit_date        date         null,
+    visit_timeslot    varchar(10)  null,
+    activity          varchar(255) null,
+    activity_duration int          null,
+    constraint FK_member_TO_reservation_1
+        foreign key (member_id) references member (id),
+    constraint FK_workspace_TO_reservation_1
+        foreign key (workspace_id) references workspace (id)
 );
 
-CREATE TABLE `visited_review_image`
+create table visited_review_image
 (
-    `id`                int NOT NULL,
-    `visited_review_id` int NOT NULL,
-    `image_url`         varchar(255) NULL,
-    CONSTRAINT `PK_VISITED_REVIEW_IMAGE` PRIMARY KEY (`id`),
-    CONSTRAINT `FK_visited_review_TO_visited_review_image_1` FOREIGN KEY (`visited_review_id`) REFERENCES `visited_review` (`id`)
+    id                int auto_increment
+        primary key,
+    visited_review_id int          not null,
+    image_url         varchar(255) not null,
+    constraint FK_visited_review_TO_visited_review_image_1
+        foreign key (visited_review_id) references visited_review (id)
 );
+
