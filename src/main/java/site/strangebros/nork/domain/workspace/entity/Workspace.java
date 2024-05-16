@@ -18,7 +18,7 @@ public class Workspace {
     private Double latitude;
     private Double longitude;
     private String roadAddress;
-    private String imageUrl;
+    private List<String> imageUrls;
     private Double rating;
     private Integer numberOfVisitors;
     private String poiId;
@@ -28,7 +28,7 @@ public class Workspace {
 
     @Builder
     public Workspace(int id, String name, String category, Double latitude, Double longitude, String roadAddress,
-                     String imageUrl, Double rating, Integer numberOfVisitors, String poiId, List<Keyword> keywords,
+                     List<String> imageUrls, Double rating, Integer numberOfVisitors, String poiId, List<Keyword> keywords,
                      LocalDateTime recentVisitDatetime) {
         this.id = id;
         this.name = name;
@@ -36,7 +36,7 @@ public class Workspace {
         this.latitude = latitude;
         this.longitude = longitude;
         this.roadAddress = roadAddress;
-        this.imageUrl = imageUrl;
+        this.imageUrls = imageUrls;
         this.rating = rating;
         this.numberOfVisitors = numberOfVisitors;
         this.poiId = poiId;

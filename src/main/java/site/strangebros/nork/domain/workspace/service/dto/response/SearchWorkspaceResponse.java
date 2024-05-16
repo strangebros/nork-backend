@@ -25,7 +25,7 @@ public class SearchWorkspaceResponse {
 
     private Boolean isWorkspaceInDatabase;
     private int id;
-    private String imageUrl;
+    private List<String> imageUrls;
     private Double rating;
     private Map<String, Integer> currentWorkers;
     private LocalDateTime recentVisitedDate;
@@ -33,7 +33,7 @@ public class SearchWorkspaceResponse {
 
     @Builder
     public SearchWorkspaceResponse(String poiId, String name, Double latitude, Double longitude, String roadAddress,
-                                   String category, Boolean isWorkspaceInDatabase, int id, String imageUrl,
+                                   String category, Boolean isWorkspaceInDatabase, int id, List<String> imageUrls,
                                    Double rating, Map<String, Integer> currentWorkers,
                                    LocalDateTime recentVisitedDate, List<String> keywords) {
         this.poiId = poiId;
@@ -44,7 +44,7 @@ public class SearchWorkspaceResponse {
         this.category = category;
         this.isWorkspaceInDatabase = isWorkspaceInDatabase;
         this.id = id;
-        this.imageUrl = imageUrl;
+        this.imageUrls = imageUrls;
         this.rating = rating;
         this.currentWorkers = currentWorkers;
         this.recentVisitedDate = recentVisitedDate;
@@ -74,7 +74,7 @@ public class SearchWorkspaceResponse {
                 .category(poiResponse.getCategory())
                 .isWorkspaceInDatabase(true)
                 .id(workspace.getId())
-                .imageUrl(workspace.getImageUrl())
+                .imageUrls(workspace.getImageUrls())
                 .rating(workspace.getRating())
                 .recentVisitedDate(workspace.getRecentVisitDatetime())
                 .keywords(workspace.getKeywords().stream().map(Keyword::getValue).toList())
