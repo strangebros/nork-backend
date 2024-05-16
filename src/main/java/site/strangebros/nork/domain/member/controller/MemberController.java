@@ -8,8 +8,10 @@ import site.strangebros.nork.domain.member.entity.Member;
 import site.strangebros.nork.domain.member.mapper.MemberMapper;
 import site.strangebros.nork.domain.member.service.MemberService;
 import site.strangebros.nork.domain.member.service.dto.request.LoginRequest;
+import site.strangebros.nork.domain.member.service.dto.request.SignUpRequest;
 import site.strangebros.nork.domain.member.service.dto.response.LoginResponse;
 
+import site.strangebros.nork.domain.member.service.dto.response.SignUpResponse;
 import site.strangebros.nork.global.auth.config.CurrentMember;
 import site.strangebros.nork.global.web.dto.response.SuccessResponse;
 
@@ -21,6 +23,15 @@ public class MemberController {
     private final MemberService memberService;
 
     private final MemberMapper memberMapper;
+
+    //회원가입
+    @PostMapping("/signUp")
+    public SuccessResponse<SignUpResponse> signUp(@RequestBody SignUpRequest signUpRequest) {
+        SignUpResponse signUpResponse = memberService.signUp(signUpRequest);
+
+        return SuccessResponse.ok(signUpResponse);
+    }
+
 
     // 로그인
     @PostMapping("/login")
