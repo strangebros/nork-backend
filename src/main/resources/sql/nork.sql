@@ -17,8 +17,11 @@ create table workspace
     image_url          varchar(255)    null,
     rating             decimal(3, 1)   null,
     number_of_visitors int             null,
-    poi_id             varchar(100)    not null
+    poi_id             varchar(100)    not null,
+    constraint idx_poi_id
+        unique (poi_id)
 );
+
 
 create table workspace_keyword
 (
@@ -41,7 +44,11 @@ create table member
     nickname      varchar(40)  not null,
     birthdate     date         null,
     position      varchar(20)  null,
-    profile_image mediumtext   null
+    profile_image mediumtext   null,
+    constraint idx_email
+        unique (email),
+    constraint idx_nickname
+        unique (nickname)
 );
 
 create table visited_space
