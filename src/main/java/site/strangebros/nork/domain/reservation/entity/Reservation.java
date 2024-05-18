@@ -1,5 +1,6 @@
 package site.strangebros.nork.domain.reservation.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,8 @@ public class Reservation {
     private int id;
     private int memberId;
     private int workspaceId;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate visitStartDate;
     private String visitTimeslot;
     private String activity;
