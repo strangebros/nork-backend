@@ -1,6 +1,7 @@
 package site.strangebros.nork.domain.reservation.service.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,9 +14,9 @@ import java.time.LocalDate;
 @Setter
 @Builder
 public class CreateRequest {
-    private int memberId;
     private int workspaceId;
 
+    @NotNull(message = "등록을 하기 위해선 작업할 날짜를 설정해 주세요.")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate visitStartDate;
     private String visitTimeslot;
@@ -23,7 +24,7 @@ public class CreateRequest {
     private int activityDuration;
 
 
-    public Reservation toReservation() {
+    public Reservation toReservation(Integer memberId) {
         return Reservation.builder()
                 .memberId(memberId)
                 .workspaceId(workspaceId)
