@@ -40,7 +40,6 @@ public class ApiExceptionHandler {
             MissingServletRequestPartException.class,
             MissingServletRequestParameterException.class,
             TypeMismatchException.class,
-            MethodArgumentNotValidException.class,
             BindException.class,
     })
     public ResponseEntity<ExceptionResponse> badRequestHandler(Exception exception) {
@@ -103,6 +102,22 @@ public class ApiExceptionHandler {
         return ExceptionResponse.builder()
                 .status(status.value())
                 .message(exception.getLocalizedMessage())
+                .build();
+    }
+
+    // Not Null 인 값 안 넣었을 때, 설정한 메시지만 던지도록 함.
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ExceptionResponse> validationFailedExceptionHandler(MethodArgumentNotValidException exception) {
+        return ResponseEntity
+                .status(BAD_REQUEST)
+                .body(buildValidationFailedResponse(BAD_REQUEST, exception));
+    }
+
+    // Not Null 인 값 안 넣었을 때, 설정한 메시지만 던지도록 함.
+    private ExceptionResponse buildValidationFailedResponse(HttpStatus status, MethodArgumentNotValidException exception) {
+        return ExceptionResponse.builder()
+                .status(status.value())
+                .message(exception.getFieldErrors().get(0).getDefaultMessage())
                 .build();
     }
 
