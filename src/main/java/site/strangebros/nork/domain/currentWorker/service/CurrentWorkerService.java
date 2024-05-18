@@ -10,6 +10,7 @@ import site.strangebros.nork.domain.currentWorker.entity.CurrentWorkerHolder;
 import site.strangebros.nork.domain.currentWorker.repository.CurrentWorkerHolderRepository;
 import site.strangebros.nork.domain.currentWorker.repository.CurrentWorkerRepository;
 import site.strangebros.nork.domain.currentWorker.service.dto.CreateWorkerRequest;
+import site.strangebros.nork.domain.currentWorker.service.dto.RefreshWorkerRequest;
 
 @RequiredArgsConstructor
 @Service
@@ -48,8 +49,8 @@ public class CurrentWorkerService {
         currentWorkerHolderRepository.save(currentWorkerHolder);
     }
 
-    public void refreshWorker(int workspaceId, int memberId) {
-        String workerId = CurrentWorker.buildId(workspaceId, memberId);
+    public void refreshWorker(int memberId, RefreshWorkerRequest request) {
+        String workerId = CurrentWorker.buildId(request.getWorkspaceId(), memberId);
         CurrentWorker currentWorker = currentWorkerRepository.findById(workerId)
                 .orElseThrow(() -> new IllegalArgumentException("요청 장소와 회원이 유효하지 않습니다."));
 
