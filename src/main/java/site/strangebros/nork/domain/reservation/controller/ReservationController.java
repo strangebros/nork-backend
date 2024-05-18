@@ -1,13 +1,13 @@
 package site.strangebros.nork.domain.reservation.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import site.strangebros.nork.domain.reservation.service.ReservationService;
 import site.strangebros.nork.domain.reservation.service.dto.request.CreateRequest;
-import site.strangebros.nork.domain.reservation.service.dto.response.CreateResponse;
+import site.strangebros.nork.global.auth.config.CurrentMember;
 import site.strangebros.nork.global.web.dto.response.SuccessResponse;
 
 @RestController
@@ -18,10 +18,12 @@ public class ReservationController {
     private final ReservationService reservationService;
 
     // 작업 예약 등록
+    // 성공, 실패 여부만 return
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping()
-    public SuccessResponse<CreateResponse> createReservation(@RequestBody CreateRequest createRequest) {
-        CreateResponse createResponse = reservationService.createResevation(createRequest);
+    public SuccessResponse<?> createReservation(@RequestBody @Valid CreateRequest createRequest, @CurrentMember Integer memberId) {
+        reservationService.createResevation(createRequest, memberId);
 
-        return SuccessResponse.ok(createResponse);
+        return SuccessResponse.created();
     }
 }
