@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Setter
-public class CreateResponse {
+public class ReadResponse {
     private int id;
     private int memberId;
     private int workspaceId;
@@ -23,7 +23,7 @@ public class CreateResponse {
     private int activityDuration;
 
     @Builder
-    public CreateResponse(int id, int memberId, int workspaceId, LocalDate visitStartDate, String visitTimeslot, String activity, int activityDuration) {
+    public ReadResponse(int id, int memberId, int workspaceId, LocalDate visitStartDate, String visitTimeslot, String activity, int activityDuration) {
         this.id = id;
         this.memberId = memberId;
         this.workspaceId = workspaceId;
