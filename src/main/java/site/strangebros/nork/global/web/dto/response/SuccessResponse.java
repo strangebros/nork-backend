@@ -1,5 +1,7 @@
 package site.strangebros.nork.global.web.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +11,7 @@ import org.springframework.http.HttpStatus;
 @NoArgsConstructor
 @Setter
 @Getter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class SuccessResponse<D> {
     private static final String DEFAULT_SUCCESS_MESSAGE = "요청을 성공했습니다.";
 
@@ -24,10 +27,20 @@ public class SuccessResponse<D> {
         return new SuccessResponse<>(HttpStatus.CREATED, DEFAULT_SUCCESS_MESSAGE, data);
     }
 
+    public static SuccessResponse<?> created() {
+        return new SuccessResponse<>(HttpStatus.CREATED, DEFAULT_SUCCESS_MESSAGE);
+    }
+
     @Builder
     public SuccessResponse(HttpStatus status, String message, D data) {
         this.status = status.value();
         this.message = message;
         this.data = data;
+    }
+
+    @Builder
+    public SuccessResponse(HttpStatus status, String message) {
+        this.status = status.value();
+        this.message = message;
     }
 }
