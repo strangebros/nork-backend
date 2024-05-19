@@ -1,5 +1,6 @@
 package site.strangebros.nork.domain.workspace.controller;
 
+import jakarta.validation.Valid;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -33,7 +34,7 @@ public class WorkspaceController {
     @GetMapping("/search")
     public SuccessResponse<List<SearchWorkspaceResponse>> search(
             @CurrentMember int memberId,
-            @ModelAttribute SearchWorkspaceRequest request
+            @ModelAttribute @Valid SearchWorkspaceRequest request
     ) {
         return SuccessResponse.ok(workspaceService.search(memberId, request));
     }
@@ -41,7 +42,7 @@ public class WorkspaceController {
     @GetMapping(value = "/search", params = {"poiId"})
     public SuccessResponse<SearchOneWorkspaceResponse> searchOne(
             @CurrentMember int memberId,
-            @ModelAttribute SearchOneWorkspaceRequest request
+            @ModelAttribute @Valid SearchOneWorkspaceRequest request
     ) {
         return SuccessResponse.ok(workspaceService.searchOne(memberId, request));
     }
@@ -53,7 +54,7 @@ public class WorkspaceController {
     }
 
     @PostMapping
-    public ResponseEntity<SuccessResponse<?>> poiToWorkspace(@RequestBody PoiToWorkspaceRequest request,
+    public ResponseEntity<SuccessResponse<?>> poiToWorkspace(@RequestBody @Valid PoiToWorkspaceRequest request,
                                                              @Value("${base-uri}") String baseUri)
             throws MalformedURLException, URISyntaxException {
         int workspaceId = workspaceService.poiToWorkspace(request);
