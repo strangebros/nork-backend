@@ -88,6 +88,11 @@ public class ReservationService {
                 .collect(Collectors.toList());
     }
 
+    // 작업 예약 삭제
+    public void deleteReservation(int reservationId) {
+        reservationMapper.deleteByReservationId(reservationId);
+    }
+
     // Reservation 객체를 ReadResponse 로 변환.
     public ReadResponse convertToReadResponse(Reservation reservation) {
         return ReadResponse.builder()
@@ -100,5 +105,7 @@ public class ReservationService {
                 .activityDuration(reservation.getActivityDuration())
                 .build();
     }
+
+
 }
 
