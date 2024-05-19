@@ -27,12 +27,8 @@ public class ReviewService {
 
         // DB에 이미지 저장
         // create에 useGeneratedKeys 속성을 사용했으므로, 방금 만든 review의 id를 바로 가져올 수 있다.
-        List<ReviewImage> images = createRequest.getImages().stream()
+        createRequest.getImages().stream()
                 .map(image -> createRequest.toReviewImage(createInfo.getId(), image))
-                .collect(Collectors.toList());
-
-        for (ReviewImage reviewImage : images) {
-            reviewMapper.createImage(reviewImage);
-        }
+                .forEach(reviewMapper::createImage);
     }
 }
