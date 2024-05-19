@@ -34,14 +34,25 @@
                vs.recent_visit_datetime, vri.image_url
         FROM workspace w LEFT JOIN workspace_keyword wk ON w.id = wk.workspace_id
         LEFT JOIN keyword k ON wk.keyword_id = k.id
-        LEFT JOIN visited_space vs ON vs.workspace_id = w.id
-        LEFT JOIN visited_review vr ON vr.workspace_id = w.id
+        LEFT JOIN visited_space vs ON vs.workspace_id = w.id AND vs.member_id = #{memberId}
+        LEFT JOIN visited_review vr ON vr.workspace_id = w.id AND vr.member_id = #{memberId}
         LEFT JOIN visited_review_image vri ON vri.visited_review_id = vr.id
         WHERE w.poi_id IN
         <foreach item="poiId" collection="poiIds" open="(" separator="," close=")">
             #{poiId}
         </foreach>
-        AND vs.member_id = #{memberId}
-        AND vr.member_id = #{memberId}
+    </select>
+
+    <select id="findOneByPoiId" parameterType="workspaceSearchOneQueryDto" resultMap="workspaceWithKeyword">
+        SELECT w.id as workspace_id, w.name, w.category, w.latitude, w.longitude,
+        w.road_address, w.image_url, w.rating, w.number_of_visitors, w.poi_id,
+        k.id as keyword_id, k.value as keyword_value,
+        vs.recent_visit_datetime, vri.image_url
+        FROM workspace w LEFT JOIN workspace_keyword wk ON w.id = wk.workspace_id
+        LEFT JOIN keyword k ON wk.keyword_id = k.id
+        LEFT JOIN visited_space vs ON vs.workspace_id = w.id AND vs.member_id = #{memberId}
+        LEFT JOIN visited_review vr ON vr.workspace_id = w.id AND vr.member_id = #{memberId}
+        LEFT JOIN visited_review_image vri ON vri.visited_review_id = vr.id
+        WHERE w.poi_id = #{poiId}
     </select>
 </mapper>

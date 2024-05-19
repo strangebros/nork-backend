@@ -7,11 +7,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import site.strangebros.nork.domain.keyword.entity.Keyword;
 import site.strangebros.nork.domain.workspace.entity.Workspace;
 import site.strangebros.nork.domain.workspace.service.client.TmapPoisClient;
 
 @NoArgsConstructor
+@ToString
 @Setter
 @Getter
 public class SearchWorkspaceResponse {
