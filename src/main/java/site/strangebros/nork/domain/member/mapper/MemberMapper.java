@@ -17,5 +17,6 @@ public interface MemberMapper {
 
     // Member findByToken(Integer id); // 유저 정보 조회를 위한 임시 메소드
 
+    Member findById(int id);
 
 }
