@@ -3,17 +3,41 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="site.strangebros.nork.domain.reservation.mapper.ReservationMapper">
+    <!-- 예약 생성 -->
     <insert id="create" parameterType="reservation">
         insert into reservation
             (member_id, workspace_id, visit_start_date, visit_timeslot, activity, activity_duration)
         values
             (#{memberId}, #{workspaceId}, #{visitStartDate}, #{visitTimeslot}, #{activity}, #{activityDuration})
     </insert>
-    
+
+    <!-- 유저의 전체 예약 조회 -->
+    <select id="findAllByMemberId" resultType="reservation">
+        select id, member_id, workspace_id, visit_start_date, visit_timeslot, activity, activity_duration
+        from reservation
+        where member_id = #{memberId}
+        order by visit_start_date
+    </select>
+
+    <!-- 유저의 상위 3개 예약 조회(단일 워크스페이스에 대하여,현재보다 이후 날짜.) -->
     <select id="findByMemberIdAndWorkspaceId" resultType="reservation">
         select id, member_id, workspace_id, visit_start_date, visit_timeslot, activity, activity_duration
         from reservation
         where member_id = #{memberId}
         and workspace_id = #{workspaceId}
+        and visit_start_date >= CURRENT_DATE
+        order by visit_start_date
+        limit 3
     </select>
+
+    <!-- 유저의 상위 3개 예약 조회(모든 워크스페이스에 대하여, 현재보다 이후 날짜) -->
+    <select id="findByMemberId" resultType="reservation">
+        select id, member_id, workspace_id, visit_start_date, visit_timeslot, activity, activity_duration
+        from reservation
+        where member_id = #{memberId}
+        and visit_start_date >= CURRENT_DATE
+        order by visit_start_date
+        limit 3
+    </select>
+
 </mapper>
