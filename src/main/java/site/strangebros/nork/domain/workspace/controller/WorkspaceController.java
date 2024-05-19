@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -52,11 +53,12 @@ public class WorkspaceController {
     }
 
     @PostMapping
-    public ResponseEntity<SuccessResponse<?>> poiToWorkspace(@RequestBody PoiToWorkspaceRequest request)
+    public ResponseEntity<SuccessResponse<?>> poiToWorkspace(@RequestBody PoiToWorkspaceRequest request,
+                                                             @Value("${base-uri}") String baseUri)
             throws MalformedURLException, URISyntaxException {
         int workspaceId = workspaceService.poiToWorkspace(request);
 
-        return ResponseEntity.created(UriComponentsBuilder.fromHttpUrl("/workspaces")
+        return ResponseEntity.created(UriComponentsBuilder.fromHttpUrl(baseUri + "/workspaces")
                         .path("/{id}").build(workspaceId)
                         .toURL().toURI())
                 .body(SuccessResponse.created());
