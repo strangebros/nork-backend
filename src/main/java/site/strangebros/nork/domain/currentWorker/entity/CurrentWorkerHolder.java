@@ -16,9 +16,9 @@ import org.springframework.data.redis.core.RedisHash;
 public class CurrentWorkerHolder {
     @Id
     private int workspaceId;
-    private List<String> workerIds;
+    private List<Integer> workerIds;
 
-    public void addWorker(String workerId) {
+    public void addWorker(int workerId) {
         if (workerIds == null) {
             workerIds = new ArrayList<>();
         }
@@ -31,7 +31,7 @@ public class CurrentWorkerHolder {
     }
 
     @Builder
-    public CurrentWorkerHolder(int workspaceId, List<String> workerIds) {
+    public CurrentWorkerHolder(int workspaceId, List<Integer> workerIds) {
         this.workspaceId = workspaceId;
         this.workerIds = workerIds;
     }
