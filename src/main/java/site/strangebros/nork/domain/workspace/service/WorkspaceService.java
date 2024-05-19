@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
 import site.strangebros.nork.domain.workspace.entity.Workspace;
 import site.strangebros.nork.domain.workspace.mapper.WorkspaceMapper;
 import site.strangebros.nork.domain.workspace.mapper.dto.WorkspaceSearchQueryDto;
-import site.strangebros.nork.domain.workspace.service.client.TmapClient;
-import site.strangebros.nork.domain.workspace.service.client.TmapClient.Request;
-import site.strangebros.nork.domain.workspace.service.client.TmapClient.Response;
+import site.strangebros.nork.domain.workspace.service.client.TmapPoisClient;
+import site.strangebros.nork.domain.workspace.service.client.TmapPoisClient.Request;
+import site.strangebros.nork.domain.workspace.service.client.TmapPoisClient.Response;
 import site.strangebros.nork.domain.workspace.service.dto.request.SearchWorkspaceRequest;
 import site.strangebros.nork.domain.workspace.service.dto.response.SearchWorkspaceResponse;
 
@@ -22,7 +22,7 @@ import site.strangebros.nork.domain.workspace.service.dto.response.SearchWorkspa
 @Service
 public class WorkspaceService {
 
-    private final TmapClient tmapClient;
+    private final TmapPoisClient tmapPoisClient;
     private final WorkspaceMapper workspaceMapper;
 
     // TODO 응답에 currentWorkers 추가 필요
@@ -42,7 +42,7 @@ public class WorkspaceService {
                 .page(request.getPage())
                 .count(request.getCount())
                 .build();
-        return tmapClient.getPois(tmapRequest).stream()
+        return tmapPoisClient.getPois(tmapRequest).stream()
                 .collect(toMap(Response::getId, Function.identity(), (oldItem, newItem) -> newItem));
     }
 

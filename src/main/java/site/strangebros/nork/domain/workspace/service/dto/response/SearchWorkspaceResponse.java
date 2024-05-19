@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import site.strangebros.nork.domain.keyword.entity.Keyword;
 import site.strangebros.nork.domain.workspace.entity.Workspace;
-import site.strangebros.nork.domain.workspace.service.client.TmapClient;
+import site.strangebros.nork.domain.workspace.service.client.TmapPoisClient;
 
 @NoArgsConstructor
 @Setter
@@ -51,7 +51,7 @@ public class SearchWorkspaceResponse {
         this.keywords = keywords;
     }
 
-    public static SearchWorkspaceResponse buildWithoutWorkspace(TmapClient.Response poiResponse) {
+    public static SearchWorkspaceResponse buildWithoutWorkspace(TmapPoisClient.Response poiResponse) {
         return SearchWorkspaceResponse.builder()
                 .poiId(poiResponse.getId())
                 .name(poiResponse.getName())
@@ -64,7 +64,7 @@ public class SearchWorkspaceResponse {
     }
 
     // TODO 응답에 currentWorkers 추가 필요
-    public static SearchWorkspaceResponse buildWithWorkspace(TmapClient.Response poiResponse, Workspace workspace) {
+    public static SearchWorkspaceResponse buildWithWorkspace(TmapPoisClient.Response poiResponse, Workspace workspace) {
         return SearchWorkspaceResponse.builder()
                 .poiId(poiResponse.getId())
                 .name(poiResponse.getName())

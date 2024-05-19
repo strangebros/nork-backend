@@ -20,7 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @RequiredArgsConstructor
 @Component
-public class TmapClient {
+public class TmapPoisClient {
     private static final String POIS_URL = "https://apis.openapi.sk.com/tmap/pois";
 
     @Value("${tmap.key}")
