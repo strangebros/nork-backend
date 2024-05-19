@@ -25,4 +25,8 @@ public interface ReservationMapper {
 
     // 작업 예약 수정
     int update(Reservation updateInfo);
+  
+    // 작업 예약 삭제
+    void deleteByReservationId(int reservationId);
+
 }

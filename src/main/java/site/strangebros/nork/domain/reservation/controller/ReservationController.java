@@ -31,6 +31,7 @@ public class ReservationController {
         return SuccessResponse.created();
     }
 
+    // 작업 예약 조회
     // 여러 예약 찾기
     @GetMapping()
     public SuccessResponse<List<ReadResponse>> readReservations(@ModelAttribute ReadRequest readRequest, @CurrentMember Integer memberId) {
@@ -69,5 +70,13 @@ public class ReservationController {
         return SuccessResponse.updated();
     }
 
+    // 작업 예약 삭제
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/{id}")
+    public SuccessResponse<?> deleteReservation(@PathVariable("id") int reservationId){
+        reservationService.deleteReservation(reservationId);
+
+        return SuccessResponse.deleted();
+    }
 
 }
