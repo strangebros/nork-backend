@@ -2,20 +2,23 @@ package site.strangebros.nork.domain.review.service.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;
+import lombok.NoArgsConstructor;
 import site.strangebros.nork.domain.review.entity.Review;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import site.strangebros.nork.domain.review.entity.ReviewImage;
+import site.strangebros.nork.domain.review.entity.ReviewKeyword;
+import site.strangebros.nork.domain.workspace.entity.WorkspaceKeyword;
 
-
+@NoArgsConstructor
 @Getter
 @Setter
-@Builder
 public class CreateRequest {
     private int workspaceId;
 
@@ -31,7 +34,21 @@ public class CreateRequest {
     private Double rating;
     private String reviewText;
 
-    private List<String> images; // Base64 encoded images
+    private List<String> images = Collections.emptyList(); // Base64 encoded images
+
+    private List<Integer> keywords = Collections.emptyList(); // 키워드 id들
+
+    @Builder
+    public CreateRequest(int workspaceId, LocalDateTime startDatetime, LocalDateTime endDatetime, String activity, Double rating, List<String> images, String reviewText, List<Integer> keywords) {
+        this.workspaceId = workspaceId;
+        this.startDatetime = startDatetime;
+        this.endDatetime = endDatetime;
+        this.activity = activity;
+        this.rating = rating;
+        this.images = images;
+        this.reviewText = reviewText;
+        this.keywords = keywords;
+    }
 
     public Review toReview(Integer memberId){
         return Review.builder()
@@ -43,6 +60,7 @@ public class CreateRequest {
                 .rating(rating)
                 .reviewText(reviewText)
                 .images(images)
+                .keywords(keywords)
                 .build();
     }
 
@@ -50,6 +68,21 @@ public class CreateRequest {
         return ReviewImage.builder()
                 .reviewId(reviewId)
                 .image(image)
+                .build();
+    }
+
+    public ReviewKeyword toReviewKeyword(Integer reviewId, Integer keywordId){
+        return ReviewKeyword.builder()
+                .visitedReviewId(reviewId)
+                .keywordId(keywordId)
+                .build();
+    }
+
+    public WorkspaceKeyword toWorkspaceKeyword(Integer workspaceId, Integer keywordId){
+        return WorkspaceKeyword.builder()
+                .workspaceId(workspaceId)
+                .keywordId(keywordId)
+                .frequency(1)
                 .build();
     }
 }
