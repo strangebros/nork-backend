@@ -25,16 +25,13 @@ public class SearchWorkspaceResponse {
 
     private Boolean isWorkspaceInDatabase;
     private int id;
-    private List<String> imageUrls;
     private Double rating;
-    private Map<String, Integer> currentWorkers;
     private LocalDateTime recentVisitedDate;
     private List<String> keywords;
 
     @Builder
     public SearchWorkspaceResponse(String poiId, String name, Double latitude, Double longitude, String roadAddress,
-                                   String category, Boolean isWorkspaceInDatabase, int id, List<String> imageUrls,
-                                   Double rating, Map<String, Integer> currentWorkers,
+                                   String category, Boolean isWorkspaceInDatabase, int id, Double rating,
                                    LocalDateTime recentVisitedDate, List<String> keywords) {
         this.poiId = poiId;
         this.name = name;
@@ -44,9 +41,7 @@ public class SearchWorkspaceResponse {
         this.category = category;
         this.isWorkspaceInDatabase = isWorkspaceInDatabase;
         this.id = id;
-        this.imageUrls = imageUrls;
         this.rating = rating;
-        this.currentWorkers = currentWorkers;
         this.recentVisitedDate = recentVisitedDate;
         this.keywords = keywords;
     }
@@ -63,7 +58,6 @@ public class SearchWorkspaceResponse {
                 .build();
     }
 
-    // TODO 응답에 currentWorkers 추가 필요
     public static SearchWorkspaceResponse buildWithWorkspace(TmapPoisClient.Response poiResponse, Workspace workspace) {
         return SearchWorkspaceResponse.builder()
                 .poiId(poiResponse.getId())
@@ -74,7 +68,6 @@ public class SearchWorkspaceResponse {
                 .category(poiResponse.getCategory())
                 .isWorkspaceInDatabase(true)
                 .id(workspace.getId())
-                .imageUrls(workspace.getImageUrls())
                 .rating(workspace.getRating())
                 .recentVisitedDate(workspace.getRecentVisitDatetime())
                 .keywords(workspace.getKeywords().stream().map(Keyword::getValue).toList())
