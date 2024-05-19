@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="site.strangebros.nork.domain.review.mapper.ReviewMapper">
+    <!-- 리뷰 생성 -->
+    <insert id="create" parameterType="review"  useGeneratedKeys="true" keyProperty="id">
+        insert into visited_review (member_id, workspace_id, start_datetime, end_datetime, activity, rating, review_text)
+        values (#{memberId}, #{workspaceId}, #{startDatetime}, #{endDatetime}, #{activity}, #{rating}, #{reviewText})
+    </insert>
+
+    <!-- 리뷰 이미지 생성 -->
+    <insert id="createImage" parameterType="reviewImage">
+        insert into visited_review_image(visited_review_id, image)
+        values (#{reviewId}, #{image})
+    </insert>
+
+    <!-- 유저의 특정 장소에 대한 모든 리뷰 불러오기 -->
+    <select id="findByMemberIdAndWorkspaceId" resultType="review">
+        select *
+        from visited_review
+        where member_id = #{memberId}
+        and workspace_id = #{workspaceId}
+    </select>
+</mapper>
