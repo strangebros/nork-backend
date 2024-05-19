@@ -31,6 +31,10 @@ public class SuccessResponse<D> {
         return new SuccessResponse<>(HttpStatus.CREATED, DEFAULT_SUCCESS_MESSAGE);
     }
 
+    public static SuccessResponse<?> deleted(){
+        return new SuccessResponse<>(HttpStatus.OK, DEFAULT_SUCCESS_MESSAGE);
+    }
+
     @Builder
     public SuccessResponse(HttpStatus status, String message, D data) {
         this.status = status.value();
