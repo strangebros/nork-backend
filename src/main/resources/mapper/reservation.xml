@@ -40,4 +40,9 @@
         limit 3
     </select>
 
+    <delete id="deleteByReservationId" parameterType="integer">
+        delete from reservation
+        where id = #{reservationId}
+    </delete>
+
 </mapper>
