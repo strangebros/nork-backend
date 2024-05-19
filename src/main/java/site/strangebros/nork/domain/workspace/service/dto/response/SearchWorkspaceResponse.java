@@ -26,7 +26,7 @@ public class SearchWorkspaceResponse {
     private String category;
 
     private Boolean isWorkspaceInDatabase;
-    private int id;
+    private Integer id;
     private Double rating;
     private LocalDateTime recentVisitedDate;
     private List<String> keywords;

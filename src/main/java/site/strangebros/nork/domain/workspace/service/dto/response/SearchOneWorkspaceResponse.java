@@ -27,7 +27,7 @@ public class SearchOneWorkspaceResponse {
 
     // from workspace db
     private Boolean isWorkspaceInDatabase;
-    private int id;
+    private Integer id;
     private Double rating;
     private LocalDateTime recentVisitedDate;
     private List<String> keywords;

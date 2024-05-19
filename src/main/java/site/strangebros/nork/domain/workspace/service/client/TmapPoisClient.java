@@ -43,6 +43,7 @@ public class TmapPoisClient {
 
         List<Map<String, Object>> pois = parsePois(response);
         return pois.stream()
+                .peek(System.out::println)
                 .map(poi -> objectMapper.convertValue(poi, Response.class))
                 .collect(Collectors.toList());
     }
@@ -105,7 +106,7 @@ public class TmapPoisClient {
         private String upperBizName;
         private String middleBizName;
         private String lowerBizName;
-        private List<Map<String, String>> newAddressList;
+        private Map<String, Object> newAddressList;
 
         public String getLatitude() {
             return noorLat;
@@ -120,7 +121,7 @@ public class TmapPoisClient {
         }
 
         public String getRoadAddress() {
-            return newAddressList.get(0).get("fullAddressRoad");
+            return (String) (((List<Map<String, Object>>) newAddressList.get("newAddress")).get(0)).get("fullAddressRoad");
         }
     }
 
