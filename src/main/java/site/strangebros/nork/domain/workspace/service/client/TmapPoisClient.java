@@ -16,11 +16,12 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RequiredArgsConstructor
 @Component
-public class TmapClient {
+public class TmapPoisClient {
     private static final String POIS_URL = "https://apis.openapi.sk.com/tmap/pois";
 
     @Value("${tmap.key}")
@@ -34,7 +35,7 @@ public class TmapClient {
         headers.set("appKey", key);
 
         ResponseEntity<Map> response = restTemplate.exchange(
-                request.toUriString(POIS_URL),
+                request.toUriComponents(POIS_URL).toUri(),
                 HttpMethod.GET,
                 new HttpEntity<>(headers),
                 Map.class
@@ -42,6 +43,7 @@ public class TmapClient {
 
         List<Map<String, Object>> pois = parsePois(response);
         return pois.stream()
+                .peek(System.out::println)
                 .map(poi -> objectMapper.convertValue(poi, Response.class))
                 .collect(Collectors.toList());
     }
@@ -77,7 +79,7 @@ public class TmapClient {
             this.count = count;
         }
 
-        public String toUriString(String url) {
+        public UriComponents toUriComponents(String url) {
             return UriComponentsBuilder.fromHttpUrl(url)
                     .queryParam("version", getVersion())
                     .queryParam("searchtypCd", getSearchtypCd())
@@ -87,7 +89,8 @@ public class TmapClient {
                     .queryParam("radius", getRadius())
                     .queryParam("page", getPage())
                     .queryParam("count", getCount())
-                    .toUriString();
+                    .encode()
+                    .build();
         }
     }
 
@@ -103,7 +106,7 @@ public class TmapClient {
         private String upperBizName;
         private String middleBizName;
         private String lowerBizName;
-        private List<Map<String, String>> newAddressList;
+        private Map<String, Object> newAddressList;
 
         public String getLatitude() {
             return noorLat;
@@ -118,7 +121,7 @@ public class TmapClient {
         }
 
         public String getRoadAddress() {
-            return newAddressList.get(0).get("fullAddressRoad");
+            return (String) (((List<Map<String, Object>>) newAddressList.get("newAddress")).get(0)).get("fullAddressRoad");
         }
     }
 

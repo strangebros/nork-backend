@@ -9,31 +9,44 @@ import java.util.Map;
 import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import site.strangebros.nork.domain.currentWorker.entity.CurrentWorker;
+import site.strangebros.nork.domain.currentWorker.service.CurrentWorkerService;
 import site.strangebros.nork.domain.workspace.entity.Workspace;
 import site.strangebros.nork.domain.workspace.mapper.WorkspaceMapper;
+import site.strangebros.nork.domain.workspace.mapper.dto.WorkspaceCreateQueryDto;
+import site.strangebros.nork.domain.workspace.mapper.dto.WorkspaceSearchOneQueryDto;
 import site.strangebros.nork.domain.workspace.mapper.dto.WorkspaceSearchQueryDto;
-import site.strangebros.nork.domain.workspace.service.client.TmapClient;
-import site.strangebros.nork.domain.workspace.service.client.TmapClient.Request;
-import site.strangebros.nork.domain.workspace.service.client.TmapClient.Response;
+import site.strangebros.nork.domain.workspace.service.client.NaverImageSearchClient;
+import site.strangebros.nork.domain.workspace.service.client.TmapPoiClient;
+import site.strangebros.nork.domain.workspace.service.client.TmapPoisClient;
+import site.strangebros.nork.domain.workspace.service.client.TmapPoisClient.Request;
+import site.strangebros.nork.domain.workspace.service.client.TmapPoisClient.Response;
+import site.strangebros.nork.domain.workspace.service.dto.request.PoiToWorkspaceRequest;
+import site.strangebros.nork.domain.workspace.service.dto.request.SearchOneWorkspaceRequest;
 import site.strangebros.nork.domain.workspace.service.dto.request.SearchWorkspaceRequest;
+import site.strangebros.nork.domain.workspace.service.dto.response.SearchOneWorkspaceResponse;
 import site.strangebros.nork.domain.workspace.service.dto.response.SearchWorkspaceResponse;
 
 @RequiredArgsConstructor
 @Service
 public class WorkspaceService {
 
-    private final TmapClient tmapClient;
+    private final TmapPoisClient tmapPoisClient;
+    private final TmapPoiClient tmapPoiClient;
+    private final NaverImageSearchClient naverImageSearchClient;
+
+    private final CurrentWorkerService currentWorkerService;
+
     private final WorkspaceMapper workspaceMapper;
 
-    // TODO 응답에 currentWorkers 추가 필요
     public List<SearchWorkspaceResponse> search(int memberId, SearchWorkspaceRequest request) {
-        Map<String, Response> poiMap = getPoiMap(request);
-        Map<String, Workspace> workspaceMap = getWorkspaceMap(memberId, poiMap);
+        Map<String, Response> poisMap = getPoisMap(request);
+        Map<String, Workspace> workspaceMap = getWorkspaceMap(memberId, poisMap);
 
-        return buildSearchResponses(poiMap, workspaceMap);
+        return buildSearchResponses(poisMap, workspaceMap);
     }
 
-    private Map<String, Response> getPoiMap(SearchWorkspaceRequest request) {
+    private Map<String, Response> getPoisMap(SearchWorkspaceRequest request) {
         Request tmapRequest = Request.builder()
                 .searchKeyword(request.getQuery())
                 .radius(request.getRadius())
@@ -42,7 +55,7 @@ public class WorkspaceService {
                 .page(request.getPage())
                 .count(request.getCount())
                 .build();
-        return tmapClient.getPois(tmapRequest).stream()
+        return tmapPoisClient.getPois(tmapRequest).stream()
                 .collect(toMap(Response::getId, Function.identity(), (oldItem, newItem) -> newItem));
     }
 
@@ -56,20 +69,66 @@ public class WorkspaceService {
                 .collect(toMap(Workspace::getPoiId, Function.identity(), (oldItem, newItem) -> newItem));
     }
 
-    private List<SearchWorkspaceResponse> buildSearchResponses(Map<String, Response> poiMap,
+    private List<SearchWorkspaceResponse> buildSearchResponses(Map<String, Response> poisMap,
                                                                Map<String, Workspace> workspaceMap) {
         List<SearchWorkspaceResponse> responses = new ArrayList<>();
 
-        for (String poi : poiMap.keySet()) {
-            Workspace workspace = workspaceMap.get(poi);
+        for (String pois : poisMap.keySet()) {
+            Workspace workspace = workspaceMap.get(pois);
             if (workspace == null) {
-                responses.add(SearchWorkspaceResponse.buildWithoutWorkspace(poiMap.get(poi)));
+                responses.add(SearchWorkspaceResponse.buildWithoutWorkspace(poisMap.get(pois)));
                 continue;
             }
-            responses.add(SearchWorkspaceResponse.buildWithWorkspace(poiMap.get(poi), workspace));
+            responses.add(SearchWorkspaceResponse.buildWithWorkspace(poisMap.get(pois), workspace));
         }
 
         return responses;
     }
 
+    public SearchOneWorkspaceResponse searchOne(int memberId, SearchOneWorkspaceRequest request) {
+        TmapPoiClient.Response poi = tmapPoiClient.getPoi(request.getPoiId());
+
+        WorkspaceSearchOneQueryDto queryDto = WorkspaceSearchOneQueryDto.builder()
+                .memberId(memberId)
+                .poiId(request.getPoiId())
+                .build();
+        Workspace workspace = workspaceMapper.findOneByPoiId(queryDto);
+
+        if (workspace == null) {
+            return SearchOneWorkspaceResponse.buildWithoutWorkspace(poi);
+        }
+
+        List<String> imageUrls = naverImageSearchClient.getImageUrls(poi.getRoadAddress() + " " + poi.getName());
+        List<CurrentWorker> currentWorkers = currentWorkerService.getWorkersOfWorkspace(workspace.getId());
+
+        return SearchOneWorkspaceResponse.buildWithWorkspace(poi, workspace, imageUrls, currentWorkers);
+    }
+
+    /**
+     * workspace id로 entity 단건 조회
+     */
+    public SearchOneWorkspaceResponse findOne(int memberId, int id) {
+        Workspace workspace = workspaceMapper.findOneByMemberIdAndWorkspaceId(memberId, id);
+
+        if (workspace == null) {
+            throw new IllegalArgumentException("존재하지 않는 workspace id 입니다.");
+        }
+
+        List<String> imageUrls = naverImageSearchClient.getImageUrls(workspace.getRoadAddress() + " " + workspace.getName());
+        List<CurrentWorker> currentWorkers = currentWorkerService.getWorkersOfWorkspace(workspace.getId());
+
+        return SearchOneWorkspaceResponse.buildWithWorkspace(workspace, imageUrls, currentWorkers);
+    }
+
+    /**
+     * poiId를 받아 poi를 조회하고, 이를 workspace db에 저장한다.
+     * @return workspace의 AI된 id
+     */
+    public int poiToWorkspace(PoiToWorkspaceRequest request) {
+        TmapPoiClient.Response poi = tmapPoiClient.getPoi(request.getPoiId());
+        WorkspaceCreateQueryDto queryDto = WorkspaceCreateQueryDto.from(poi);
+
+        workspaceMapper.create(queryDto);
+        return queryDto.getId();
+    }
 }

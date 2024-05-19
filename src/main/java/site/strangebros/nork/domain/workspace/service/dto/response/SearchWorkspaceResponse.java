@@ -7,11 +7,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import site.strangebros.nork.domain.keyword.entity.Keyword;
 import site.strangebros.nork.domain.workspace.entity.Workspace;
-import site.strangebros.nork.domain.workspace.service.client.TmapClient;
+import site.strangebros.nork.domain.workspace.service.client.TmapPoisClient;
 
 @NoArgsConstructor
+@ToString
 @Setter
 @Getter
 public class SearchWorkspaceResponse {
@@ -24,17 +26,14 @@ public class SearchWorkspaceResponse {
     private String category;
 
     private Boolean isWorkspaceInDatabase;
-    private int id;
-    private List<String> imageUrls;
+    private Integer id;
     private Double rating;
-    private Map<String, Integer> currentWorkers;
     private LocalDateTime recentVisitedDate;
     private List<String> keywords;
 
     @Builder
     public SearchWorkspaceResponse(String poiId, String name, Double latitude, Double longitude, String roadAddress,
-                                   String category, Boolean isWorkspaceInDatabase, int id, List<String> imageUrls,
-                                   Double rating, Map<String, Integer> currentWorkers,
+                                   String category, Boolean isWorkspaceInDatabase, int id, Double rating,
                                    LocalDateTime recentVisitedDate, List<String> keywords) {
         this.poiId = poiId;
         this.name = name;
@@ -44,14 +43,12 @@ public class SearchWorkspaceResponse {
         this.category = category;
         this.isWorkspaceInDatabase = isWorkspaceInDatabase;
         this.id = id;
-        this.imageUrls = imageUrls;
         this.rating = rating;
-        this.currentWorkers = currentWorkers;
         this.recentVisitedDate = recentVisitedDate;
         this.keywords = keywords;
     }
 
-    public static SearchWorkspaceResponse buildWithoutWorkspace(TmapClient.Response poiResponse) {
+    public static SearchWorkspaceResponse buildWithoutWorkspace(TmapPoisClient.Response poiResponse) {
         return SearchWorkspaceResponse.builder()
                 .poiId(poiResponse.getId())
                 .name(poiResponse.getName())
@@ -63,8 +60,7 @@ public class SearchWorkspaceResponse {
                 .build();
     }
 
-    // TODO 응답에 currentWorkers 추가 필요
-    public static SearchWorkspaceResponse buildWithWorkspace(TmapClient.Response poiResponse, Workspace workspace) {
+    public static SearchWorkspaceResponse buildWithWorkspace(TmapPoisClient.Response poiResponse, Workspace workspace) {
         return SearchWorkspaceResponse.builder()
                 .poiId(poiResponse.getId())
                 .name(poiResponse.getName())
@@ -74,7 +70,6 @@ public class SearchWorkspaceResponse {
                 .category(poiResponse.getCategory())
                 .isWorkspaceInDatabase(true)
                 .id(workspace.getId())
-                .imageUrls(workspace.getImageUrls())
                 .rating(workspace.getRating())
                 .recentVisitedDate(workspace.getRecentVisitDatetime())
                 .keywords(workspace.getKeywords().stream().map(Keyword::getValue).toList())
