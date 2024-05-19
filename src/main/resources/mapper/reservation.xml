@@ -38,8 +38,22 @@
         and visit_start_date >= CURRENT_DATE
         order by visit_start_date
         limit 3
+    </select> 
+
+    <!-- 예약 id로 단일 예약 정보 조회하기 -->
+    <select id="findByReservationId" resultType="reservation">
+        select *
+        from reservation
+        where id = #{reservationId}
     </select>
 
+    <!-- 예약 정보 업데이트 하기 -->
+    <update id="update" parameterType="reservation">
+        update reservation
+        set visit_start_date = #{visitStartDate}, visit_timeslot = #{visitTimeslot}, activity = #{activity}, activity_duration = #{activityDuration}
+        where id = #{id}
+    </update>
+  
     <delete id="deleteByReservationId" parameterType="integer">
         delete from reservation
         where id = #{reservationId}

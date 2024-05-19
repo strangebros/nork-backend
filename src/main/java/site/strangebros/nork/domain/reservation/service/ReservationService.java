@@ -7,6 +7,7 @@ import site.strangebros.nork.domain.reservation.entity.Reservation;
 import site.strangebros.nork.domain.reservation.mapper.ReservationMapper;
 import site.strangebros.nork.domain.reservation.service.dto.request.CreateRequest;
 import site.strangebros.nork.domain.reservation.service.dto.request.ReadRequest;
+import site.strangebros.nork.domain.reservation.service.dto.request.UpdateRequest;
 import site.strangebros.nork.domain.reservation.service.dto.response.ReadResponse;
 
 import java.util.List;
@@ -88,9 +89,30 @@ public class ReservationService {
                 .collect(Collectors.toList());
     }
 
-    // 작업 예약 삭제
-    public void deleteReservation(int reservationId) {
-        reservationMapper.deleteByReservationId(reservationId);
+    // 단일 예약 찾기 (업데이트 시 정보를 불러오기 위함)
+    public ReadResponse readReservationDetail(int reservationId) {
+        // 검색
+        Reservation reservation = reservationMapper.findByReservationId(reservationId);
+
+        // ReadResponse로 변환하여 반환.
+        return ReadResponse.builder()
+                .id(reservation.getId())
+                .memberId(reservation.getMemberId())
+                .workspaceId(reservation.getWorkspaceId())
+                .visitStartDate(reservation.getVisitStartDate())
+                .visitTimeslot(reservation.getVisitTimeslot())
+                .activity(reservation.getActivity())
+                .activityDuration(reservation.getActivityDuration())
+                .build();
+    }
+
+    // 예약 정보 업데이트
+    public void updateReservation(int reservationId, UpdateRequest updateRequest, Integer memberId) {
+        // Reservation Entity로 변환
+        Reservation updateInfo = updateRequest.toReservation(reservationId, memberId);
+
+        // DB에 값 저장
+        reservationMapper.update(updateInfo);
     }
 
     // Reservation 객체를 ReadResponse 로 변환.
@@ -105,7 +127,10 @@ public class ReservationService {
                 .activityDuration(reservation.getActivityDuration())
                 .build();
     }
-
-
+  
+    // 작업 예약 삭제
+    public void deleteReservation(int reservationId) {
+        reservationMapper.deleteByReservationId(reservationId);
+    }
 }
 

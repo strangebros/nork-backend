@@ -20,6 +20,13 @@ public interface ReservationMapper {
     // 유저의 상위 3개 예약 조회(모든 워크스페이스에 대하여, 현재보다 이후 날짜)
     List<Reservation> findByMemberId(int memberId);
 
+    // 단일 예약 찾기 (업데이트 시 정보를 불러오기 위함)
+    Reservation findByReservationId(Integer reservationId);
+
+    // 작업 예약 수정
+    int update(Reservation updateInfo);
+  
     // 작업 예약 삭제
     void deleteByReservationId(int reservationId);
+
 }
