@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import site.strangebros.nork.domain.reservation.service.ReservationService;
 import site.strangebros.nork.domain.reservation.service.dto.request.CreateRequest;
 import site.strangebros.nork.domain.reservation.service.dto.request.ReadRequest;
+import site.strangebros.nork.domain.reservation.service.dto.request.UpdateRequest;
 import site.strangebros.nork.domain.reservation.service.dto.response.ReadResponse;
 import site.strangebros.nork.global.auth.config.CurrentMember;
 import site.strangebros.nork.global.web.dto.response.SuccessResponse;
@@ -30,6 +31,7 @@ public class ReservationController {
         return SuccessResponse.created();
     }
 
+    // 여러 예약 찾기
     @GetMapping()
     public SuccessResponse<List<ReadResponse>> readReservations(@ModelAttribute ReadRequest readRequest, @CurrentMember Integer memberId) {
         List<ReadResponse> reservations;
@@ -49,5 +51,23 @@ public class ReservationController {
 
         return SuccessResponse.ok(reservations);
     }
+
+    // 단일 예약 찾기 (업데이트 시 정보를 불러오기 위함)
+    @GetMapping("/{id}")
+    public SuccessResponse<ReadResponse> readReservationDetail(@PathVariable("id") int reservationId){
+        ReadResponse reservation = reservationService.readReservationDetail(reservationId);
+
+        return SuccessResponse.ok(reservation);
+    }
+
+    // 예약 정보 업데이트 하기
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("/{id}")
+    public SuccessResponse<?> updateReservation(@PathVariable("id")int reservationId, @RequestBody @Valid UpdateRequest updateRequest, @CurrentMember Integer memberId){
+        reservationService.updateReservation(reservationId, updateRequest, memberId);
+
+        return SuccessResponse.updated();
+    }
+
 
 }
