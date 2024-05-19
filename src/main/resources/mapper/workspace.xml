@@ -10,7 +10,6 @@
         <result property="latitude" column="latitude"/>
         <result property="longitude" column="longitude"/>
         <result property="roadAddress" column="road_address"/>
-        <result property="imageUrl" column="image_url"/>
         <result property="rating" column="rating"/>
         <result property="numberOfVisitors" column="number_of_visitors"/>
         <result property="poiId" column="poi_id"/>
@@ -29,7 +28,7 @@
 
     <select id="findAllByPoiIds" parameterType="workspaceSearchQueryDto" resultMap="workspaceWithKeyword">
         SELECT w.id as workspace_id, w.name, w.category, w.latitude, w.longitude,
-               w.road_address, w.image_url, w.rating, w.number_of_visitors, w.poi_id,
+               w.road_address, w.rating, w.number_of_visitors, w.poi_id,
                k.id as keyword_id, k.value as keyword_value,
                vs.recent_visit_datetime, vri.image_url
         FROM workspace w LEFT JOIN workspace_keyword wk ON w.id = wk.workspace_id
@@ -45,7 +44,7 @@
 
     <select id="findOneByPoiId" parameterType="workspaceSearchOneQueryDto" resultMap="workspaceWithKeyword">
         SELECT w.id as workspace_id, w.name, w.category, w.latitude, w.longitude,
-        w.road_address, w.image_url, w.rating, w.number_of_visitors, w.poi_id,
+        w.road_address, w.rating, w.number_of_visitors, w.poi_id,
         k.id as keyword_id, k.value as keyword_value,
         vs.recent_visit_datetime, vri.image_url
         FROM workspace w LEFT JOIN workspace_keyword wk ON w.id = wk.workspace_id
@@ -55,4 +54,9 @@
         LEFT JOIN visited_review_image vri ON vri.visited_review_id = vr.id
         WHERE w.poi_id = #{poiId}
     </select>
+
+    <insert id="create" parameterType="workspaceCreateQueryDto" useGeneratedKeys="true" keyProperty="id">
+        insert into workspace(name, category, latitude, longitude, road_address, rating, number_of_visitors, poi_id)
+        values(#{name}, #{category}, #{latitude}, #{longitude}, #{roadAddress}, #{rating}, #{numberOfVisitors}, #{poiId})
+    </insert>
 </mapper>

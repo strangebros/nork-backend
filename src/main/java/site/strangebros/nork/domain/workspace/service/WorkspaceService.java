@@ -13,6 +13,7 @@ import site.strangebros.nork.domain.currentWorker.entity.CurrentWorker;
 import site.strangebros.nork.domain.currentWorker.service.CurrentWorkerService;
 import site.strangebros.nork.domain.workspace.entity.Workspace;
 import site.strangebros.nork.domain.workspace.mapper.WorkspaceMapper;
+import site.strangebros.nork.domain.workspace.mapper.dto.WorkspaceCreateQueryDto;
 import site.strangebros.nork.domain.workspace.mapper.dto.WorkspaceSearchOneQueryDto;
 import site.strangebros.nork.domain.workspace.mapper.dto.WorkspaceSearchQueryDto;
 import site.strangebros.nork.domain.workspace.service.client.NaverImageSearchClient;
@@ -20,6 +21,7 @@ import site.strangebros.nork.domain.workspace.service.client.TmapPoiClient;
 import site.strangebros.nork.domain.workspace.service.client.TmapPoisClient;
 import site.strangebros.nork.domain.workspace.service.client.TmapPoisClient.Request;
 import site.strangebros.nork.domain.workspace.service.client.TmapPoisClient.Response;
+import site.strangebros.nork.domain.workspace.service.dto.request.PoiToWorkspaceRequest;
 import site.strangebros.nork.domain.workspace.service.dto.request.SearchOneWorkspaceRequest;
 import site.strangebros.nork.domain.workspace.service.dto.request.SearchWorkspaceRequest;
 import site.strangebros.nork.domain.workspace.service.dto.response.SearchOneWorkspaceResponse;
@@ -102,6 +104,18 @@ public class WorkspaceService {
         List<CurrentWorker> currentWorkers = currentWorkerService.getWorkersOfWorkspace(workspace.getId());
 
         return SearchOneWorkspaceResponse.buildWithWorkspace(poi, workspace, imageUrls, currentWorkers);
+    }
+
+    /**
+     * poiId를 받아 poi를 조회하고, 이를 workspace db에 저장한다.
+     * @return workspace의 AI된 id
+     */
+    public int poiToWorkspace(PoiToWorkspaceRequest request) {
+        TmapPoiClient.Response poi = tmapPoiClient.getPoi(request.getPoiId());
+        WorkspaceCreateQueryDto queryDto = WorkspaceCreateQueryDto.from(poi);
+
+        workspaceMapper.create(queryDto);
+        return queryDto.getId();
     }
 
 }
