@@ -16,6 +16,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RequiredArgsConstructor
@@ -34,7 +35,7 @@ public class TmapPoisClient {
         headers.set("appKey", key);
 
         ResponseEntity<Map> response = restTemplate.exchange(
-                request.toUriString(POIS_URL),
+                request.toUriComponents(POIS_URL).toUri(),
                 HttpMethod.GET,
                 new HttpEntity<>(headers),
                 Map.class
@@ -77,7 +78,7 @@ public class TmapPoisClient {
             this.count = count;
         }
 
-        public String toUriString(String url) {
+        public UriComponents toUriComponents(String url) {
             return UriComponentsBuilder.fromHttpUrl(url)
                     .queryParam("version", getVersion())
                     .queryParam("searchtypCd", getSearchtypCd())
@@ -87,7 +88,8 @@ public class TmapPoisClient {
                     .queryParam("radius", getRadius())
                     .queryParam("page", getPage())
                     .queryParam("count", getCount())
-                    .toUriString();
+                    .encode()
+                    .build();
         }
     }
 
