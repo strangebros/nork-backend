@@ -94,8 +94,6 @@ public class WorkspaceService {
                 .build();
         Workspace workspace = workspaceMapper.findOneByPoiId(queryDto);
 
-        System.out.println(workspace);
-
         if (workspace == null) {
             return SearchOneWorkspaceResponse.buildWithoutWorkspace(poi);
         }
@@ -104,6 +102,22 @@ public class WorkspaceService {
         List<CurrentWorker> currentWorkers = currentWorkerService.getWorkersOfWorkspace(workspace.getId());
 
         return SearchOneWorkspaceResponse.buildWithWorkspace(poi, workspace, imageUrls, currentWorkers);
+    }
+
+    /**
+     * workspace id로 entity 단건 조회
+     */
+    public SearchOneWorkspaceResponse findOne(int memberId, int id) {
+        Workspace workspace = workspaceMapper.findOneByMemberIdAndWorkspaceId(memberId, id);
+
+        if (workspace == null) {
+            throw new IllegalArgumentException("존재하지 않는 workspace id 입니다.");
+        }
+
+        List<String> imageUrls = naverImageSearchClient.getImageUrls(workspace.getRoadAddress() + " " + workspace.getName());
+        List<CurrentWorker> currentWorkers = currentWorkerService.getWorkersOfWorkspace(workspace.getId());
+
+        return SearchOneWorkspaceResponse.buildWithWorkspace(workspace, imageUrls, currentWorkers);
     }
 
     /**
@@ -117,5 +131,4 @@ public class WorkspaceService {
         workspaceMapper.create(queryDto);
         return queryDto.getId();
     }
-
 }

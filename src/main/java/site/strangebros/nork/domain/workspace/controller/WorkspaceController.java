@@ -7,12 +7,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.util.UriBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 import site.strangebros.nork.domain.workspace.service.WorkspaceService;
 import site.strangebros.nork.domain.workspace.service.dto.request.PoiToWorkspaceRequest;
@@ -46,14 +45,20 @@ public class WorkspaceController {
         return SuccessResponse.ok(workspaceService.searchOne(memberId, request));
     }
 
+    @GetMapping("/{id}")
+    public SuccessResponse<SearchOneWorkspaceResponse> findOne(@CurrentMember int memberId,
+                                                               @PathVariable("id") int id) {
+        return SuccessResponse.ok(workspaceService.findOne(memberId, id));
+    }
+
     @PostMapping
     public ResponseEntity<SuccessResponse<?>> poiToWorkspace(@RequestBody PoiToWorkspaceRequest request)
             throws MalformedURLException, URISyntaxException {
         int workspaceId = workspaceService.poiToWorkspace(request);
 
         return ResponseEntity.created(UriComponentsBuilder.fromHttpUrl("/workspaces")
-                .path("/{id}").build(workspaceId)
-                .toURL().toURI())
+                        .path("/{id}").build(workspaceId)
+                        .toURL().toURI())
                 .body(SuccessResponse.created());
     }
 

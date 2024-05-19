@@ -1,6 +1,7 @@
 package site.strangebros.nork.domain.workspace.service.dto.response;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
@@ -58,9 +59,31 @@ public class SearchOneWorkspaceResponse {
         this.currentWorkers = currentWorkers;
     }
 
+    public static SearchOneWorkspaceResponse buildWithWorkspace(Workspace workspace,
+                                                                List<String> imageUrls, List<CurrentWorker> currentWorkers) {
+        List<String> images = new ArrayList<>(imageUrls);
+        images.addAll(workspace.getImages());
+        return SearchOneWorkspaceResponse.builder()
+                .poiId(workspace.getPoiId())
+                .name(workspace.getName())
+                .latitude(workspace.getLatitude())
+                .longitude(workspace.getLongitude())
+                .roadAddress(workspace.getRoadAddress())
+                .category(workspace.getCategory())
+                .isWorkspaceInDatabase(true)
+                .id(workspace.getId())
+                .rating(workspace.getRating())
+                .recentVisitedDate(workspace.getRecentVisitDatetime())
+                .keywords(workspace.getKeywords().stream().map(Keyword::getValue).toList())
+                .imageUrls(images)
+                .currentWorkers(currentWorkers.stream().map(CurrentWorkerResponse::from).toList())
+                .build();
+    }
+
     public static SearchOneWorkspaceResponse buildWithWorkspace(TmapPoiClient.Response poiResponse, Workspace workspace,
                                                                 List<String> imageUrls, List<CurrentWorker> currentWorkers) {
-        imageUrls.addAll(workspace.getImageUrls());
+        List<String> images = new ArrayList<>(imageUrls);
+        images.addAll(workspace.getImages());
         return SearchOneWorkspaceResponse.builder()
                 .poiId(poiResponse.getId())
                 .name(poiResponse.getName())
@@ -73,7 +96,7 @@ public class SearchOneWorkspaceResponse {
                 .rating(workspace.getRating())
                 .recentVisitedDate(workspace.getRecentVisitDatetime())
                 .keywords(workspace.getKeywords().stream().map(Keyword::getValue).toList())
-                .imageUrls(imageUrls)
+                .imageUrls(images)
                 .currentWorkers(currentWorkers.stream().map(CurrentWorkerResponse::from).toList())
                 .build();
     }
