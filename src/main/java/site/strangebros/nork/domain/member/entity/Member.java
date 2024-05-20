@@ -18,9 +18,10 @@ public class Member {
     private LocalDate birthdate;
     private String position;
     private String role;
+    private String profileImage;
 
     @Builder
-    public Member(int id, String email, String password, String nickname, LocalDate birthdate, String position, String role) {
+    public Member(int id, String email, String password, String nickname, LocalDate birthdate, String position, String role, String profileImage) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -28,6 +29,7 @@ public class Member {
         this.birthdate = birthdate;
         this.position = position;
         this.role = role;
+        this.profileImage = profileImage;
     }
 }
 
