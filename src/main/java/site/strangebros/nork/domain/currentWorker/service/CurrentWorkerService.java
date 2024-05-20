@@ -49,9 +49,16 @@ public class CurrentWorkerService {
         currentWorkerHolderRepository.save(currentWorkerHolder);
     }
 
-    public void refreshWorker(int memberId, RefreshWorkerRequest request) {
+    public void deleteWorker(int reservationId) {
+        CurrentWorker currentWorker = currentWorkerRepository.findById(String.valueOf(reservationId))
+                .orElseThrow(() -> new IllegalArgumentException("요청한 currentWorker가 존재하지 않습니다."));
+
+        currentWorkerRepository.delete(currentWorker);
+    }
+
+    public void refreshWorker(RefreshWorkerRequest request) {
         CurrentWorker currentWorker = currentWorkerRepository.findById(String.valueOf(request.getReservationId()))
-                .orElseThrow(() -> new IllegalArgumentException("요청 장소와 회원이 유효하지 않습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("요청한 currentWorker가 존재하지 않습니다."));
 
         currentWorker.refresh();
         currentWorkerRepository.save(currentWorker);
