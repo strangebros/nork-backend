@@ -22,8 +22,9 @@ import site.strangebros.nork.global.auth.exception.InvalidJWTException;
 @Component
 public class JWTProvider implements InitializingBean {
     private static final int ACCESS_TOKEN_EXPIRATION_PERIOD = 60 * 30;
-    private static final String MEMBER_ID_KEY = "memberId";
-    private static final String MEMBER_ROLE_KEY = "memberRole";
+    private static final String MEMBER_ID_KEY = "id";
+    private static final String MEMBER_ROLE_KEY = "role";
+    private static final String MEMBER_NICKNAME_KEY = "nickname";
 
     @Value("${jwt.key}")
     private String encodedKeyValue;
@@ -47,6 +48,7 @@ public class JWTProvider implements InitializingBean {
         return Jwts.builder()
                 .claim(MEMBER_ID_KEY, authority.getId())
                 .claim(MEMBER_ROLE_KEY, authority.getRole())
+                .claim(MEMBER_NICKNAME_KEY, authority.getNickname())
                 .signWith(key)
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(now.plusSeconds(ACCESS_TOKEN_EXPIRATION_PERIOD)))
@@ -59,6 +61,7 @@ public class JWTProvider implements InitializingBean {
         return MemberAuthority.builder()
                 .id(parsePayload(payload.get(MEMBER_ID_KEY), int.class, MEMBER_ID_KEY))
                 .role(parseMemberRolePayload(payload.get(MEMBER_ROLE_KEY)))
+                .nickname(parsePayload(payload.get(MEMBER_NICKNAME_KEY), String.class, MEMBER_NICKNAME_KEY))
                 .build();
     }
 

@@ -10,10 +10,12 @@ import site.strangebros.nork.domain.member.entity.MemberRole;
 public class MemberAuthority {
     private int id;
     private MemberRole role;
+    private String nickname;
 
     @Builder
-    public MemberAuthority(int id, MemberRole role) {
+    public MemberAuthority(int id, MemberRole role, String nickname) {
         this.id = id;
         this.role = role;
+        this.nickname = nickname;
     }
 }

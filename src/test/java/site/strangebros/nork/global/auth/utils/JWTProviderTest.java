@@ -33,7 +33,7 @@ class JWTProviderTest {
 
         // when
         String accessToken = jwtProvider.buildAccessToken(
-                MemberAuthority.builder().id(1).role(MemberRole.MEMBER).build()
+                MemberAuthority.builder().id(1).role(MemberRole.MEMBER).nickname("gmelon").build()
         );
 
         // then

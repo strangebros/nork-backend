@@ -50,6 +50,7 @@ public class MemberService {
                         jwtProvider.buildAccessToken(MemberAuthority.builder()
                                 .id(member.getId())
                                 .role(MemberRole.MEMBER)
+                                .nickname(member.getNickname())
                                 .build())
                 ).build();
     }
@@ -68,6 +69,7 @@ public class MemberService {
                         jwtProvider.buildAccessToken(MemberAuthority.builder()
                                 .id(member.getId())
                                 .role(MemberRole.MEMBER)
+                                .nickname(member.getNickname())
                                 .build())
                 ).build();
     }
@@ -81,6 +83,7 @@ public class MemberService {
                         jwtProvider.buildAccessToken(MemberAuthority.builder()
                                 .id(member.getId())
                                 .role(MemberRole.GUEST)
+                                .nickname(member.getNickname())
                                 .build())
                 ).build();
     }
