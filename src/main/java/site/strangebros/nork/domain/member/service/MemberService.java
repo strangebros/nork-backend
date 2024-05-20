@@ -11,6 +11,7 @@ import site.strangebros.nork.domain.member.service.dto.request.LoginRequest;
 import site.strangebros.nork.domain.member.service.dto.request.SignUpRequest;
 import site.strangebros.nork.domain.member.service.dto.request.TokenRefreshRequest;
 import site.strangebros.nork.domain.member.service.dto.response.LoginResponse;
+import site.strangebros.nork.domain.member.service.dto.response.MemberResponse;
 import site.strangebros.nork.domain.member.service.dto.response.SignUpResponse;
 import site.strangebros.nork.global.auth.dto.MemberAuthority;
 import site.strangebros.nork.global.auth.utils.JWTProvider;
@@ -103,5 +104,10 @@ public class MemberService {
                                 .nickname(member.getNickname())
                                 .build())
                 ).build();
+    }
+
+    public MemberResponse getInfo(int targetMemberId) {
+        Member member = memberMapper.findById(targetMemberId);
+        return MemberResponse.from(member);
     }
 }
