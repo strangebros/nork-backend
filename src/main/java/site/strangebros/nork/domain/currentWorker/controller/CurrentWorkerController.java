@@ -1,5 +1,6 @@
 package site.strangebros.nork.domain.currentWorker.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +18,7 @@ public class CurrentWorkerController {
     private final CurrentWorkerService currentWorkerService;
 
     @PostMapping("/refresh")
-    public void refresh(@CurrentMember int memberId, @RequestBody RefreshWorkerRequest request) {
+    public void refresh(@CurrentMember int memberId, @RequestBody @Valid RefreshWorkerRequest request) {
         currentWorkerService.refreshWorker(memberId, request);
     }
 
