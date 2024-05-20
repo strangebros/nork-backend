@@ -7,8 +7,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
+@Builder
 @NoArgsConstructor
 @Getter
 @Setter
@@ -26,14 +28,18 @@ public class Review {
     private String activity;
     private Double rating;
     private String reviewText;
-    private List<String> images;
-    private List<Integer> keywords;
+
+    @Builder.Default
+    private List<String> images = new ArrayList<>();
+
+    @Builder.Default
+    private List<Integer> keywords = new ArrayList<>();
 
     @Builder
-    public Review(int id, int workspaceId, int memberId, LocalDateTime startDatetime, LocalDateTime endDatetime, String activity, Double rating, String reviewText, List<String> images, List<Integer> keywords) {
+    public Review(int id, int memberId,  int workspaceId,LocalDateTime startDatetime, LocalDateTime endDatetime, String activity, Double rating, String reviewText, List<String> images, List<Integer> keywords) {
         this.id = id;
-        this.workspaceId = workspaceId;
         this.memberId = memberId;
+        this.workspaceId = workspaceId;
         this.startDatetime = startDatetime;
         this.endDatetime = endDatetime;
         this.activity = activity;

@@ -5,12 +5,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.strangebros.nork.domain.review.entity.Review;
 import site.strangebros.nork.domain.review.entity.ReviewImage;
+import site.strangebros.nork.domain.review.entity.ReviewKeyword;
 import site.strangebros.nork.domain.review.mapper.ReviewKewordMapper;
 import site.strangebros.nork.domain.review.mapper.ReviewMapper;
 import site.strangebros.nork.domain.review.service.dto.request.CreateRequest;
+import site.strangebros.nork.domain.review.service.dto.request.ReadRequest;
+import site.strangebros.nork.domain.review.service.dto.response.ReadResponse;
 import site.strangebros.nork.domain.workspace.entity.WorkspaceKeyword;
 import site.strangebros.nork.domain.workspace.mapper.WorkspaceKeywordMapper;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,5 +61,86 @@ public class ReviewService {
                     else
                         workspaceKeywordMapper.increaseFrequency(workspaceKeyword.getWorkspaceId(), workspaceKeyword.getKeywordId());
                 });
+    }
+
+    // 리뷰 조회
+    // 유저의 리뷰 5개씩 조회(단일 워크스페이스에 대하여) - 워크스페이스 페이지 -> 나의 리뷰 조회
+    public List<ReadResponse> readWorkspaceReview(ReadRequest readRequest, Integer memberId) {
+        // review entity로 변경
+        Review readInfo = readRequest.toReview(memberId);
+
+        // 검색
+        int offset = (readRequest.getPage() - 1) * readRequest.getCount();
+        List<Review> reviews = reviewMapper.findByMemberIdAndWorkspaceId(readInfo, offset, readRequest.getCount());
+
+        // 가져온 리스트를 readResponse 리스트로 변환
+        // 변환 시, image와 keyword는 List<String>, List<Integer>에서 List<ReadImageResponse>, List<ReadKeywordResponse> 로 바꿔야 함.
+        return reviews.stream()
+                .map(this::convertToReadResponse)
+                .collect(Collectors.toList());
+    }
+
+    // 유저의 리뷰 10개씩 조회(모든 워크스페이스에 대하여) - 마이페이지 -> 리뷰들 조회
+    public List<ReadResponse> readReview(ReadRequest readRequest, Integer memberId) {
+        // review entity로 변경
+        Review readInfo = readRequest.toReview(memberId);
+
+        // 검색
+        int offset = (readRequest.getPage() - 1) * readRequest.getCount();
+        List<Review> reviews = reviewMapper.findByMemberId(readInfo, offset, readRequest.getCount());
+
+        //가져온 리스트를 readResponse 리스트로 변환
+        // 변환 시, image와 keyword는 List<String>, List<Integer>에서 List<ReadImageResponse>, List<ReadKeywordResponse> 로 바꿔야 함.
+        return reviews.stream()
+                .map(this::convertToReadResponse)
+                .collect(Collectors.toList());
+    }
+
+    // 단일 리뷰 조회(업데이트 시 정보를 불러오기 위함)
+    public ReadResponse readReviewDetail(int reviewId) {
+        // 검색
+        Review review = reviewMapper.findByReviewId(reviewId);
+
+        // readResponse로 변환하여 반환
+        // 변환 시, image와 keyword는 List<String>, List<Integer>에서 List<ReadImageResponse>, List<ReadKeywordResponse> 로 바꿔야 함.
+        return convertToReadResponse(review);
+    }
+
+    // Review 객체를 ReadResponse로 변환
+    public ReadResponse convertToReadResponse(Review review) {
+        // 이미지 조회하여 이미지 리스트 만들기
+        List<ReadResponse.ReadImageResponse> readImageResponseList = review.getImages().stream()
+                .map(image -> {
+                    ReviewImage reviewImage = reviewMapper.findImageByReviewIdAndImage(review.getId(), image);
+                    return ReadResponse.ReadImageResponse.builder()
+                            .visitedReviewImageId(reviewImage.getId())
+                            .image(image)
+                            .build();
+                })
+                .collect(Collectors.toList());
+
+        // 키워드 조회하여 키워드 리스트 만들기
+        List<ReadResponse.ReadKeywordResponse> readKeywordResponseList = review.getKeywords().stream()
+                .map(keywordId -> {
+                    ReviewKeyword reviewKeyword = reviewKewordMapper.findKeywordByReviewIdAndKeyword(review.getId(), keywordId);
+                    return ReadResponse.ReadKeywordResponse.builder()
+                            .reviewKeywordId(reviewKeyword.getId())
+                            .value(reviewKewordMapper.findKeywordValueByKeywordId(keywordId))
+                            .build();
+                })
+                .collect(Collectors.toList());
+
+        return ReadResponse.builder()
+                .id(review.getId())
+                .memberId(review.getMemberId())
+                .workspaceId(review.getWorkspaceId())
+                .startDatetime(review.getStartDatetime())
+                .endDatetime(review.getEndDatetime())
+                .activity(review.getActivity())
+                .rating(review.getRating())
+                .reviewText(review.getReviewText())
+                .images(readImageResponseList)
+                .keywords(readKeywordResponseList)
+                .build();
     }
 }

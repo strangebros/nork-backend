@@ -8,5 +8,22 @@
         insert into review_keyword (keyword_id, visited_review_id)
         values (#{keywordId}, #{visitedReviewId})
     </insert>
+    
+    <!-- 특정 리뷰의 키워드 조회 -->
+    <select id="findKeywordByReviewIdAndKeyword" parameterType="map" resultType="reviewKeyword">
+        select
+            id,
+            keyword_id as keyword,
+            visited_review_id as reviewId
+        from review_keyword
+        where visited_review_id = #{reviewId}
+        and keyword_id = #{keywordId}
+    </select>
 
+    <!-- 단일 키워드 조회 -->
+    <select id="findKeywordValueByKeywordId" parameterType="int" resultType="String">
+        select value
+        from keyword
+        where id = #{keywordId}
+    </select>
 </mapper>
