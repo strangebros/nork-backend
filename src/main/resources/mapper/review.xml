@@ -16,10 +16,99 @@
     </insert>
 
     <!-- 유저의 특정 장소에 대한 모든 리뷰 불러오기 -->
-    <select id="findByMemberIdAndWorkspaceId" resultType="review">
-        select *
-        from visited_review
-        where member_id = #{memberId}
-        and workspace_id = #{workspaceId}
+    <select id="findByMemberIdAndWorkspaceId" parameterType="map" resultMap="reviewResultMap">
+        select
+            vr.id as review_id,
+            vr.member_id,
+            vr.workspace_id,
+            vr.start_datetime,
+            vr.end_datetime,
+            vr.activity,
+            vr.rating,
+            vr.review_text,
+            vri.id as image_id,
+            vri.image,
+            rk.id as keyword_id,
+            rk.keyword_id
+        from visited_review vr
+        left join visited_review_image vri on vr.id = vri.visited_review_id
+        left join review_keyword rk on vr.id = rk.visited_review_id
+        where vr.member_id = #{review.memberId}
+        and vr.workspace_id = #{review.workspaceId}
+        order by vr.start_datetime desc
+        limit #{count} offset #{offset}
     </select>
+
+    <!-- 유저의 모든 리뷰 불러오기 (모든 장소에 대한) -->
+    <select id="findByMemberId" parameterType="map" resultMap="reviewResultMap">
+        select
+            vr.id as review_id,
+            vr.member_id,
+            vr.workspace_id,
+            vr.start_datetime,
+            vr.end_datetime,
+            vr.activity,
+            vr.rating,
+            vr.review_text,
+            vri.id as image_id,
+            vri.image,
+            rk.id as keyword_id,
+            rk.keyword_id
+        from visited_review vr
+            left join visited_review_image vri on vr.id = vri.visited_review_id
+            left join review_keyword rk on vr.id = rk.visited_review_id
+        where vr.member_id = #{review.memberId}
+        order by vr.start_datetime desc
+            limit #{count} offset #{offset}
+    </select>
+
+    <!-- 단일 리뷰 조회(업데이트 시 정보를 불러오기 위함) -->
+    <select id="findByReviewId" parameterType="int" resultMap="reviewResultMap">
+        select
+            vr.id as review_id,
+            vr.member_id,
+            vr.workspace_id,
+            vr.start_datetime,
+            vr.end_datetime,
+            vr.activity,
+            vr.rating,
+            vr.review_text,
+            vri.id as image_id,
+            vri.image,
+            rk.id as review_keyword_id,
+            rk.keyword_id
+        from visited_review vr
+        left join visited_review_image vri on vr.id = vri.visited_review_id
+        left join review_keyword rk on vr.id = rk.visited_review_id
+        where vr.id = #{reviewId}
+    </select>
+
+    <!-- 특정 리뷰의 이미지 조회 -->
+    <select id="findImageByReviewIdAndImage" parameterType="map" resultType="reviewImage">
+        select
+            id,
+            visited_review_id as reviewId,
+            image
+        from visited_review_image
+        where visited_review_id = #{reviewId}
+        and image = #{image}
+    </select>
+
+    <resultMap id="reviewResultMap" type="review">
+        <id property="id" column="review_id"/>
+        <result property="memberId" column="member_id"/>
+        <result property="workspaceId" column="workspace_id"/>
+        <result property="startDatetime" column="start_datetime"/>
+        <result property="endDatetime" column="end_datetime"/>
+        <result property="activity" column="activity"/>
+        <result property="rating" column="rating"/>
+        <result property="reviewText" column="review_text"/>
+        <collection property="images" ofType="java.lang.String" >
+            <result column="image" />
+        </collection>
+        <collection property="keywords" ofType="java.lang.Integer">
+            <result column="keyword_id" />
+        </collection>
+    </resultMap>
+
 </mapper>
