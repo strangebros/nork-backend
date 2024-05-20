@@ -19,7 +19,7 @@ public class CurrentWorkerController {
 
     @PostMapping("/refresh")
     public void refresh(@CurrentMember int memberId, @RequestBody @Valid RefreshWorkerRequest request) {
-        currentWorkerService.refreshWorker(memberId, request);
+        currentWorkerService.refreshWorker(request);
     }
 
 }
