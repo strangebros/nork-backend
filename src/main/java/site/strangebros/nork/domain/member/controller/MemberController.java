@@ -9,6 +9,7 @@ import site.strangebros.nork.domain.member.mapper.MemberMapper;
 import site.strangebros.nork.domain.member.service.MemberService;
 import site.strangebros.nork.domain.member.service.dto.request.LoginRequest;
 import site.strangebros.nork.domain.member.service.dto.request.SignUpRequest;
+import site.strangebros.nork.domain.member.service.dto.request.TokenRefreshRequest;
 import site.strangebros.nork.domain.member.service.dto.response.LoginResponse;
 
 import site.strangebros.nork.domain.member.service.dto.response.SignUpResponse;
@@ -34,6 +35,14 @@ public class MemberController {
     @PostMapping("/login")
     public SuccessResponse<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
         LoginResponse loginResponse = memberService.login(loginRequest);
+
+        return SuccessResponse.ok(loginResponse);
+    }
+
+    // token refresh
+    @PostMapping("/refresh-token")
+    public SuccessResponse<LoginResponse> refreshToken(@CurrentMember int memberId, @RequestBody TokenRefreshRequest request) {
+        LoginResponse loginResponse = memberService.refreshToken(memberId, request);
 
         return SuccessResponse.ok(loginResponse);
     }

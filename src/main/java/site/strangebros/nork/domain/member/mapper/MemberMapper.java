@@ -15,6 +15,8 @@ public interface MemberMapper {
     // 닉네임으로 찾기 (회원가입 닉네임 중복확인)
     Member findByNickname(String nickname);
 
+    Member findById(int memberId);
+
     // Member findByToken(Integer id); // 유저 정보 조회를 위한 임시 메소드
 
 

@@ -9,6 +9,7 @@ import site.strangebros.nork.domain.member.entity.MemberRole;
 import site.strangebros.nork.domain.member.mapper.MemberMapper;
 import site.strangebros.nork.domain.member.service.dto.request.LoginRequest;
 import site.strangebros.nork.domain.member.service.dto.request.SignUpRequest;
+import site.strangebros.nork.domain.member.service.dto.request.TokenRefreshRequest;
 import site.strangebros.nork.domain.member.service.dto.response.LoginResponse;
 import site.strangebros.nork.domain.member.service.dto.response.SignUpResponse;
 import site.strangebros.nork.global.auth.dto.MemberAuthority;
@@ -83,6 +84,22 @@ public class MemberService {
                         jwtProvider.buildAccessToken(MemberAuthority.builder()
                                 .id(member.getId())
                                 .role(MemberRole.GUEST)
+                                .nickname(member.getNickname())
+                                .build())
+                ).build();
+    }
+
+    public LoginResponse refreshToken(int memberId, TokenRefreshRequest request) {
+        if (jwtProvider.parseAccessToken(request.getAccessToken()).getId() != memberId) {
+            throw new IllegalArgumentException("주어진 토큰과 요청한 회원 정보가 일치하지 않습니다.");
+        }
+
+        Member member = memberMapper.findById(memberId);
+        return LoginResponse.builder()
+                .accessToken(
+                        jwtProvider.buildAccessToken(MemberAuthority.builder()
+                                .id(member.getId())
+                                .role(MemberRole.MEMBER)
                                 .nickname(member.getNickname())
                                 .build())
                 ).build();
