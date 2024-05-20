@@ -30,9 +30,9 @@ public class CurrentWorkerService {
     }
 
     private List<CurrentWorker> findCurrentWorkers(CurrentWorkerHolder currentWorkerHolder) {
-        List<String> workerIds = currentWorkerHolder.getWorkerIds();
+        List<Integer> workerIds = currentWorkerHolder.getWorkerIds();
         return workerIds.stream()
-                .map(workerId -> currentWorkerRepository.findById(workerId)
+                .map(workerId -> currentWorkerRepository.findById(String.valueOf(workerId))
                                 .orElse(null))
                 .filter(Objects::nonNull)
                 .toList();
@@ -49,10 +49,16 @@ public class CurrentWorkerService {
         currentWorkerHolderRepository.save(currentWorkerHolder);
     }
 
-    public void refreshWorker(int memberId, RefreshWorkerRequest request) {
-        String workerId = CurrentWorker.buildId(request.getWorkspaceId(), memberId);
-        CurrentWorker currentWorker = currentWorkerRepository.findById(workerId)
-                .orElseThrow(() -> new IllegalArgumentException("요청 장소와 회원이 유효하지 않습니다."));
+    public void deleteWorker(int reservationId) {
+        CurrentWorker currentWorker = currentWorkerRepository.findById(String.valueOf(reservationId))
+                .orElseThrow(() -> new IllegalArgumentException("요청한 currentWorker가 존재하지 않습니다."));
+
+        currentWorkerRepository.delete(currentWorker);
+    }
+
+    public void refreshWorker(RefreshWorkerRequest request) {
+        CurrentWorker currentWorker = currentWorkerRepository.findById(String.valueOf(request.getReservationId()))
+                .orElseThrow(() -> new IllegalArgumentException("요청한 currentWorker가 존재하지 않습니다."));
 
         currentWorker.refresh();
         currentWorkerRepository.save(currentWorker);

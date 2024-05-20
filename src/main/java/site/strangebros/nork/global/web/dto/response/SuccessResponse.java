@@ -1,6 +1,5 @@
 package site.strangebros.nork.global.web.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,6 +20,10 @@ public class SuccessResponse<D> {
 
     public static <D> SuccessResponse<D> ok(D data) {
         return new SuccessResponse<>(HttpStatus.OK, DEFAULT_SUCCESS_MESSAGE, data);
+    }
+
+    public static SuccessResponse<?> ok() {
+        return new SuccessResponse<>(HttpStatus.OK, DEFAULT_SUCCESS_MESSAGE);
     }
 
     public static <D> SuccessResponse<D> created(D data) {
