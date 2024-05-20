@@ -26,6 +26,13 @@
         where nickname=#{nickname}
     </select>
 
+    <!-- id로 조회 -->
+    <select id="findById" parameterType="int" resultType="member">
+        select id, email, nickname, birthdate, position, profile_image, role
+        from member
+        where id=#{id}
+    </select>
+
     <!-- 임시 조회 -->
     <!--    <select id="findByToken" parameterType="Integer" resultType="member">-->
     <!--        select id, email, password-->

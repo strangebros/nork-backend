@@ -19,7 +19,7 @@ public class CurrentWorker {
     private static final int DEFAULT_LIVE_MINUTES = 10;
 
     @Id
-    private String id;
+    private int id; // reservationId
     private int memberId;
     private String position;
     private LocalDateTime startTime;
@@ -33,16 +33,12 @@ public class CurrentWorker {
     }
 
     @Builder
-    public CurrentWorker(int workspaceId, int memberId, String position, LocalDateTime startTime) {
-        this.id = buildId(workspaceId, memberId);
+    public CurrentWorker(int id, int memberId, String position, LocalDateTime startTime) {
+        this.id = id;
         this.memberId = memberId;
         this.position = position;
         this.startTime = startTime;
 
         refresh();
-    }
-
-    public static String buildId(int workspaceId, int memberId) {
-        return workspaceId + "." + memberId;
     }
 }

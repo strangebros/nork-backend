@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class RefreshWorkerRequest {
-    @NotNull(message = "workspaceId는 필수 값입니다.")
-    private Integer workspaceId;
+    @NotNull(message = "reservationId는 필수 값입니다.")
+    private Integer reservationId;
 
     @Builder
-    public RefreshWorkerRequest(int workspaceId) {
-        this.workspaceId = workspaceId;
+    public RefreshWorkerRequest(int reservationId) {
+        this.reservationId = reservationId;
     }
 }
