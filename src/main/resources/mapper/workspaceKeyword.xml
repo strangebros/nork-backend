@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="site.strangebros.nork.domain.workspace.mapper.WorkspaceKeywordMapper">
+    <!-- 존재하는 워크스페이스 키워드인지 조회 -->
+    <select id="findByWorkspaceIdAndKeywordId" resultType="int" parameterType="map">
+        select count(*)
+        from workspace_keyword
+        where workspace_id = #{workspaceId}
+        and keyword_id = #{keywordId}
+    </select>
+
+    <!-- 워크스페이스 키워드 생성 -->
+    <insert id="createKeyword" parameterType="workspaceKeyword">
+        insert into workspace_keyword (workspace_id, keyword_id, frequency)
+        values (#{workspaceId}, #{keywordId}, #{frequency})
+    </insert>
+
+    <!-- 기존 워크스페이스 키워드의 빈도 1 증가 -->
+    <update id="increaseFrequency" parameterType="map">
+        update workspace_keyword
+        set frequency = frequency + 1
+        where workspace_id = #{workspaceId}
+        and keyword_id = #{keywordId}
+    </update>
+</mapper>
