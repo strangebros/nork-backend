@@ -35,12 +35,16 @@ public class ReviewController {
     public SuccessResponse<List<ReadResponse>> readReviews(@ModelAttribute ReadRequest readRequest, @CurrentMember Integer memberId){
         List<ReadResponse> reviews;
 
+        //System.out.println("워크스페이스 정보: "+ readRequest.getWorkspaceId());
+
         // 유저의 리뷰 5개씩 조회(단일 워크스페이스에 대하여)
         if(readRequest.getWorkspaceId() != -1){
+            //System.out.println("워크스페이스 리뷰 조회 시작");
            reviews = reviewService.readWorkspaceReview(readRequest, memberId);
         }
         // 유저의 리뷰 10개씩 조회(모든 워크스페이스에 대하여) - 마이페이지 -> 리뷰들 조회
         else{
+            //System.out.println("유저 리뷰 조회 시작");
             reviews = reviewService.readReview(readRequest, memberId);
         }
 

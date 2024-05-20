@@ -86,7 +86,8 @@ public class ReviewService {
         Review readInfo = readRequest.toReview(memberId);
 
         // 검색
-        List<Review> reviews = reviewMapper.findByMemberId(readInfo, readRequest.getPage(), readRequest.getCount());
+        int offset = (readRequest.getPage() - 1) * readRequest.getCount();
+        List<Review> reviews = reviewMapper.findByMemberId(readInfo, offset, readRequest.getCount());
 
         //가져온 리스트를 readResponse 리스트로 변환
         // 변환 시, image와 keyword는 List<String>, List<Integer>에서 List<ReadImageResponse>, List<ReadKeywordResponse> 로 바꿔야 함.
