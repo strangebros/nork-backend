@@ -15,10 +15,10 @@ public interface ReviewMapper {
     int createImage(ReviewImage createImageInfo);
 
     // 유저의 리뷰 5개씩 조회(단일 워크스페이스에 대하여) - 워크스페이스 페이지 -> 나의 리뷰 조회
-    List<Review> findByMemberIdAndWorkspaceId(Review review, int offset, int count);
+    List<Review> findByMemberIdAndWorkspaceId(Review readInfo, int offset, int count);
 
     // 유저의 리뷰 10개씩 조회(모든 워크스페이스에 대하여) - 마이페이지 -> 리뷰들 조회
-    List<Review> findByMemberId(Review review, int offset, int count);
+    List<Review> findByMemberId(Review readInfo, int offset, int count);
 
     // 단일 리뷰 조회(업데이트 시 정보를 불러오기 위함)
     Review findByReviewId(int reviewId);
