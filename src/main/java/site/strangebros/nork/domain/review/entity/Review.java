@@ -36,10 +36,10 @@ public class Review {
     private List<Integer> keywords = new ArrayList<>();
 
     @Builder
-    public Review(int id, int workspaceId, int memberId, LocalDateTime startDatetime, LocalDateTime endDatetime, String activity, Double rating, String reviewText, List<String> images, List<Integer> keywords) {
+    public Review(int id, int memberId,  int workspaceId,LocalDateTime startDatetime, LocalDateTime endDatetime, String activity, Double rating, String reviewText, List<String> images, List<Integer> keywords) {
         this.id = id;
-        this.workspaceId = workspaceId;
         this.memberId = memberId;
+        this.workspaceId = workspaceId;
         this.startDatetime = startDatetime;
         this.endDatetime = endDatetime;
         this.activity = activity;
