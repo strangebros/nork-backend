@@ -14,14 +14,14 @@
 
     <!-- 이메일로 조회 -->
     <select id="findByEmail" parameterType="string" resultType="member">
-        select id, email, password
+        select id, email, password, nickname
         from member
         where email=#{email}
     </select>
 
     <!-- 닉네임으로 조회  -->
     <select id="findByNickname" parameterType="string" resultType="member">
-        select id, email, password
+        select id, email, password, nickname
         from member
         where nickname=#{nickname}
     </select>
