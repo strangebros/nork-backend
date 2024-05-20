@@ -12,6 +12,7 @@ import site.strangebros.nork.domain.member.service.dto.request.SignUpRequest;
 import site.strangebros.nork.domain.member.service.dto.request.TokenRefreshRequest;
 import site.strangebros.nork.domain.member.service.dto.response.LoginResponse;
 
+import site.strangebros.nork.domain.member.service.dto.response.MemberResponse;
 import site.strangebros.nork.domain.member.service.dto.response.SignUpResponse;
 import site.strangebros.nork.global.auth.config.CurrentMember;
 import site.strangebros.nork.global.web.dto.response.SuccessResponse;
@@ -55,10 +56,9 @@ public class MemberController {
         return SuccessResponse.ok(loginResponse);
     }
 
-    // 유저 정보 조회를 위한 임시 메서드
-    //    @GetMapping("/userInfo")
-    //    public Member userInfo(@CurrentMember Integer memberId){
-    //        return memberMapper.findByToken(memberId);
-    //    }
+    @GetMapping("/{targetMemberId}")
+    public SuccessResponse<MemberResponse> getInfo(@PathVariable("targetMemberId") int targetMemberId) {
+        return SuccessResponse.ok(memberService.getInfo(targetMemberId));
+    }
 
 }
