@@ -12,7 +12,7 @@ import site.strangebros.nork.domain.review.entity.Review;
 @Setter
 public class ReadRequest {
 
-    private int workspaceId = -1;
+    private Integer workspaceId = -1;
 
     // pagination
     @NotNull(message = "review 조회를 위해서는 page가 반드시 필요합니다.")
