@@ -15,4 +15,5 @@ public interface WorkspaceMapper {
     Workspace findOneByMemberIdAndWorkspaceId(@Param("memberId") int memberId, @Param("workspaceId") int workspaceId);
     void create(WorkspaceCreateQueryDto dto);
     void updateRatingAndNumberOfVisitors(@Param("workspaceId") int workspaceId, @Param("rating") Double rating);
+    void updateRating(@Param("workspaceId") int workspaceId, @Param("oldRating") Double oldRating, @Param("newRating") Double newRating);
 }

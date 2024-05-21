@@ -94,4 +94,10 @@
             number_of_visitors = number_of_visitors + 1
         where id = #{workspaceId}
     </update>
+
+    <update id="updateRating" >
+        update workspace
+        set rating = ((rating * number_of_visitors) - #{oldRating} + #{newRating}) / (number_of_visitors)
+        where id = #{workspaceId}
+    </update>
 </mapper>

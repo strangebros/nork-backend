@@ -152,10 +152,18 @@ public class ReviewService {
 
     // 리뷰 업데이트
     public void updateReview(int reviewId, UpdateRequest updateRequest) {
+        // 기존 review 값 가져와놓기
+        Review exReview = reviewMapper.findByReviewId(reviewId);
+        int workspaceId = exReview.getWorkspaceId();
+        Double oldRating = exReview.getRating();
+
         // Review Entity로 변경
         Review updateInfo = updateRequest.toReview(reviewId);
 
         // DB에 저장
         reviewMapper.update(updateInfo);
+
+        // 워크스페이스의 rating 수정하기
+        workspaceMapper.updateRating(workspaceId, oldRating, updateInfo.getRating());
     }
 }
