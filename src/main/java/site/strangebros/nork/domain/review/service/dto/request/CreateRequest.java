@@ -31,6 +31,8 @@ public class CreateRequest {
     private LocalDateTime endDatetime;
 
     private String activity;
+
+    @NotNull(message = "워크스페이스에 대한 별점은 필수로 들어가야 합니다.")
     private Double rating;
     private String reviewText;
 
