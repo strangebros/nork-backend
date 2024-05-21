@@ -24,8 +24,10 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 import site.strangebros.nork.global.web.dto.response.ExceptionResponse;
 
@@ -119,6 +121,13 @@ public class ApiExceptionHandler {
                 .status(status.value())
                 .message(exception.getFieldErrors().get(0).getDefaultMessage())
                 .build();
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<ExceptionResponse> handleMaxSizeException(MaxUploadSizeExceededException exception) {
+        return ResponseEntity
+                .status(BAD_REQUEST)
+                .body(buildResponse(BAD_REQUEST, exception));
     }
 
 }
