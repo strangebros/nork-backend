@@ -14,6 +14,7 @@ import site.strangebros.nork.domain.review.service.dto.request.UpdateRequest;
 import site.strangebros.nork.domain.review.service.dto.response.ReadResponse;
 import site.strangebros.nork.domain.workspace.entity.WorkspaceKeyword;
 import site.strangebros.nork.domain.workspace.mapper.WorkspaceKeywordMapper;
+import site.strangebros.nork.domain.workspace.mapper.WorkspaceMapper;
 
 import java.util.Collections;
 import java.util.List;
@@ -25,6 +26,7 @@ public class ReviewService {
 
     private final ReviewMapper reviewMapper;
     private final ReviewKewordMapper reviewKewordMapper;
+    private final WorkspaceMapper workspaceMapper;
     private final WorkspaceKeywordMapper workspaceKeywordMapper;
 
     @Transactional
@@ -62,6 +64,9 @@ public class ReviewService {
                     else
                         workspaceKeywordMapper.increaseFrequency(workspaceKeyword.getWorkspaceId(), workspaceKeyword.getKeywordId());
                 });
+
+        // 워크스페이스에서 rating 과 number_of_visitors 수정
+        workspaceMapper.updateRatingAndNumberOfVisitors(createInfo.getWorkspaceId(), createInfo.getRating());
     }
 
     // 리뷰 조회

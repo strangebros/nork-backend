@@ -87,4 +87,11 @@
         insert into workspace(name, category, latitude, longitude, road_address, rating, number_of_visitors, poi_id)
         values(#{name}, #{category}, #{latitude}, #{longitude}, #{roadAddress}, #{rating}, #{numberOfVisitors}, #{poiId})
     </insert>
+
+    <update id="updateRatingAndNumberOfVisitors" >
+        update workspace
+        set rating = ((rating * number_of_visitors) + #{rating}) / (number_of_visitors + 1),
+            number_of_visitors = number_of_visitors + 1
+        where id = #{workspaceId}
+    </update>
 </mapper>
