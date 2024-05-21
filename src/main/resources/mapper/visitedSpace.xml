@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="site.strangebros.nork.domain.workspace.mapper.VisitedSpaceMapper">
+    <select id="findByMemberIdAndWorkspaceId">
+        select id
+        from visited_space
+        where member_id = #{memberId}
+        and workspace_id = #{workspaceId}
+    </select>
+
+    <insert id="createVisitedSpace">
+        insert into visited_space(member_id, workspace_id, visit_count, recent_visit_datetime)
+        values (#{memberId}, #{workspaceId}, 1, #{startDatetime})
+    </insert>
+
+    <update id="updateVisitedSpace">
+        update visited_space
+        set visit_count = visit_count + 1,
+            recent_visit_datetime = #{startDatetime}
+        where id = #{visitedSpaceId}
+    </update>
+</mapper>
