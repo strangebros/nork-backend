@@ -16,6 +16,7 @@ public class SignUpRequest {
     private String nickname;
     private LocalDate birthdate;
     private String position;
+    private String profileImage;
 
     public Member toMember(){
         return Member.builder()
@@ -24,6 +25,7 @@ public class SignUpRequest {
                 .nickname(nickname)
                 .birthdate(birthdate)
                 .position(position)
+                .profileImage(profileImage)
                 .build();
     }
 }
