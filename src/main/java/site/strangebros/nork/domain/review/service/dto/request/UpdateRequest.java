@@ -1,5 +1,6 @@
 package site.strangebros.nork.domain.review.service.dto.request;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,8 @@ import java.util.List;
 @Setter
 public class UpdateRequest {
     private String activity;
+
+    @NotNull(message = "워크스페이스에 대한 별점은 필수로 들어가야 합니다.")
     private Double rating;
     private String reviewText;
 
