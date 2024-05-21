@@ -39,14 +39,17 @@ public class ReservationController {
 
         // 유저의 모든 예약 조회(모든 워크스페이스에 대하여) - 마이페이지 -> 전체 예약 보기
         if(readRequest.getAll()){
+            //System.out.println("유저의 모든 예약 조회 시작. all: "+readRequest.getAll()+", workspaceId: "+readRequest.getWorkspaceId());
             reservations = reservationService.readAllReservation(readRequest, memberId);
         }
         // 유저의 상위 3개 예약 조회(단일 워크스페이스에 대하여, 현재보다 이후 날짜) - 워크스페이스 화면
         else if(readRequest.getWorkspaceId() != -1){
+            //System.out.println("유저의 단일 워크스페이스에 대하여 상위 3개 예약 조회 시작. all: "+readRequest.getAll()+", workspaceId: "+readRequest.getWorkspaceId());
             reservations = reservationService.readWorkspaceReservation(readRequest, memberId);
         }
         // 유저의 상위 3개 예약 조회(모든 워크스페이스에 대하여, 현재보다 이후 날짜) - 마이페이지 메인 화면
         else{
+            //System.out.println("유저의 모든 워크스페이스에 대하여 상위 3개 예약 조회 시작. all: "+readRequest.getAll()+", workspaceId: "+readRequest.getWorkspaceId());
             reservations = reservationService.readReservation(readRequest, memberId);
         }
 
