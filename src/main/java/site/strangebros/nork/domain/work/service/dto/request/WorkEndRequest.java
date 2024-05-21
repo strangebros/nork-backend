@@ -9,7 +9,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.strangebros.nork.domain.review.service.dto.request.CreateRequest;
-import site.strangebros.nork.domain.review.service.dto.request.ReviewRequest;
 
 @NoArgsConstructor
 @Getter

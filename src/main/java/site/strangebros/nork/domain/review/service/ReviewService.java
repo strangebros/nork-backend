@@ -10,6 +10,7 @@ import site.strangebros.nork.domain.review.mapper.ReviewKewordMapper;
 import site.strangebros.nork.domain.review.mapper.ReviewMapper;
 import site.strangebros.nork.domain.review.service.dto.request.CreateRequest;
 import site.strangebros.nork.domain.review.service.dto.request.ReadRequest;
+import site.strangebros.nork.domain.review.service.dto.request.UpdateRequest;
 import site.strangebros.nork.domain.review.service.dto.response.ReadResponse;
 import site.strangebros.nork.domain.workspace.entity.WorkspaceKeyword;
 import site.strangebros.nork.domain.workspace.mapper.WorkspaceKeywordMapper;
@@ -142,5 +143,14 @@ public class ReviewService {
                 .images(readImageResponseList)
                 .keywords(readKeywordResponseList)
                 .build();
+    }
+
+    // 리뷰 업데이트
+    public void updateReview(int reviewId, UpdateRequest updateRequest) {
+        // Review Entity로 변경
+        Review updateInfo = updateRequest.toReview(reviewId);
+
+        // DB에 저장
+        reviewMapper.update(updateInfo);
     }
 }

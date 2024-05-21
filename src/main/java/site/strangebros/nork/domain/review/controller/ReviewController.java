@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import site.strangebros.nork.domain.review.service.ReviewService;
 import site.strangebros.nork.domain.review.service.dto.request.CreateRequest;
 import site.strangebros.nork.domain.review.service.dto.request.ReadRequest;
+import site.strangebros.nork.domain.review.service.dto.request.UpdateRequest;
 import site.strangebros.nork.domain.review.service.dto.response.ReadResponse;
 import site.strangebros.nork.global.auth.config.CurrentMember;
 import site.strangebros.nork.global.web.dto.response.SuccessResponse;
@@ -57,5 +58,13 @@ public class ReviewController {
         ReadResponse review = reviewService.readReviewDetail(reviewId);
 
         return SuccessResponse.ok(review);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("/{id}")
+    public SuccessResponse<?> updateReview(@PathVariable("id") int reviewId, @RequestBody @Valid UpdateRequest updateRequest){
+        reviewService.updateReview(reviewId, updateRequest);
+
+        return SuccessResponse.updated();
     }
 }

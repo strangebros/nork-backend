@@ -127,4 +127,11 @@
         </collection>
     </resultMap>
 
+    <!-- 리뷰 업데이트 -->
+    <update id="update" parameterType="review">
+        update visited_review
+        set activity = #{activity}, rating = #{rating}, review_text = #{reviewText}
+        where id = #{id}
+    </update>
+
 </mapper>
