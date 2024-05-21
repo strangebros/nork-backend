@@ -7,9 +7,9 @@
     <!-- 회원가입 -->
     <insert id="signUp" parameterType="member">
         insert into member
-            (email, password, nickname, birthdate, position, role)
+            (email, password, nickname, birthdate, position, profile_image, role)
         values
-            (#{email}, #{password}, #{nickname}, #{birthdate}, #{position}, "member")
+            (#{email}, #{password}, #{nickname}, #{birthdate}, #{position}, #{profileImage}, "member")
     </insert>
 
     <!-- 이메일로 조회 -->
