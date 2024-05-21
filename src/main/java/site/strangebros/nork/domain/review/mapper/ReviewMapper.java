@@ -25,4 +25,7 @@ public interface ReviewMapper {
 
     // 리뷰 조회 시 이미지 객체를 만들기 위해 이미지 조회
     ReviewImage findImageByReviewIdAndImage(int reviewId, String image);
+
+    // 리뷰 업데이트
+    int update(Review updateInfo);
 }
