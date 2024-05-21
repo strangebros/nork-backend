@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import site.strangebros.nork.domain.member.entity.Member;
 import site.strangebros.nork.domain.member.mapper.MemberMapper;
 import site.strangebros.nork.domain.member.service.MemberService;
@@ -17,6 +18,8 @@ import site.strangebros.nork.domain.member.service.dto.response.SignUpResponse;
 import site.strangebros.nork.global.auth.config.CurrentMember;
 import site.strangebros.nork.global.web.dto.response.SuccessResponse;
 
+import java.util.Base64;
+
 @RestController
 @RequestMapping("/members")
 @RequiredArgsConstructor
@@ -27,6 +30,15 @@ public class MemberController {
     //회원가입
     @PostMapping("/signUp")
     public SuccessResponse<SignUpResponse> signUp(@RequestBody SignUpRequest signUpRequest) {
+        // 파일 크기 검사
+        String base64Image = signUpRequest.getProfileImage();
+        byte[] decodedImage = Base64.getDecoder().decode(base64Image);
+
+        // 실제 파일 크기 계산
+        if(decodedImage.length > 5_242_880){ // 5MB = 5 * 1024 * 1024 bytes
+            throw new MaxUploadSizeExceededException(5_242_880);
+        }
+
         SignUpResponse signUpResponse = memberService.signUp(signUpRequest);
 
         return SuccessResponse.ok(signUpResponse);
