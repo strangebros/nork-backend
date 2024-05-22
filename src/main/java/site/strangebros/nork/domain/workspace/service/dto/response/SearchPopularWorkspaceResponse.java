@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 @NoArgsConstructor
@@ -37,6 +38,6 @@ public class SearchPopularWorkspaceResponse {
         this.rating = rating;
         this.poiId = poiId;
         this.recentVisitedDate = recentVisitedDate;
-        this.keywords = keywords;
+        this.keywords = keywords != null ? keywords : Collections.emptyList(); // Null 안전성 보장
     }
 }
