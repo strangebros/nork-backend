@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 public class SearchPopularWorkspaceResponse {
-    // from workspace db
+
     private Integer id;
     private String name;
     private String category;
@@ -21,9 +21,9 @@ public class SearchPopularWorkspaceResponse {
     private String roadAddress;
     private Double rating;
     private String poiId;
-    // from visited_workspace table
+
     private LocalDateTime recentVisitedDate;
-    // from workspace_keyword table
+
     private List<String> keywords;
 
     @Builder
