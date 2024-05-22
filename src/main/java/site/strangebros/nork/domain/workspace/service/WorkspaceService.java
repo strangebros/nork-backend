@@ -4,6 +4,7 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toMap;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import site.strangebros.nork.domain.currentWorker.entity.CurrentWorker;
 import site.strangebros.nork.domain.currentWorker.service.CurrentWorkerService;
+import site.strangebros.nork.domain.keyword.entity.Keyword;
 import site.strangebros.nork.domain.workspace.entity.Workspace;
 import site.strangebros.nork.domain.workspace.mapper.WorkspaceMapper;
 import site.strangebros.nork.domain.workspace.mapper.dto.WorkspaceCreateQueryDto;
@@ -144,6 +146,8 @@ public class WorkspaceService {
     }
 
     public SearchPopularWorkspaceResponse convertToSearchPopularWorkspaceResponse(Workspace workspace){
+        List<String> keywords = workspace.getKeywords() != null ? workspace.getKeywords().stream().map(Keyword::getValue).collect(Collectors.toList()) : Collections.emptyList();
+
         return SearchPopularWorkspaceResponse.builder()
                 .id(workspace.getId())
                 .name(workspace.getName())
@@ -153,6 +157,8 @@ public class WorkspaceService {
                 .roadAddress(workspace.getRoadAddress())
                 .rating(workspace.getRating())
                 .poiId(workspace.getPoiId())
+                .recentVisitedDate(workspace.getRecentVisitDatetime())
+                .keywords(keywords)
                 .build();
     }
 }
