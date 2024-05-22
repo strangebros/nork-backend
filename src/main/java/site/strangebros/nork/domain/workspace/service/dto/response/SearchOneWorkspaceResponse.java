@@ -12,6 +12,7 @@ import site.strangebros.nork.domain.currentWorker.entity.CurrentWorker;
 import site.strangebros.nork.domain.keyword.entity.Keyword;
 import site.strangebros.nork.domain.workspace.entity.Workspace;
 import site.strangebros.nork.domain.workspace.service.client.TmapPoiClient;
+import site.strangebros.nork.domain.workspace.service.client.TmapPoiClient.Response;
 
 @NoArgsConstructor
 @ToString
@@ -101,7 +102,7 @@ public class SearchOneWorkspaceResponse {
                 .build();
     }
 
-    public static SearchOneWorkspaceResponse buildWithoutWorkspace(TmapPoiClient.Response poiResponse) {
+    public static SearchOneWorkspaceResponse buildWithoutWorkspace(Response poiResponse, List<String> imageUrls) {
         return SearchOneWorkspaceResponse.builder()
                 .poiId(poiResponse.getId())
                 .name(poiResponse.getName())
@@ -110,6 +111,7 @@ public class SearchOneWorkspaceResponse {
                 .roadAddress(poiResponse.getRoadAddress())
                 .category(poiResponse.getCategory())
                 .isWorkspaceInDatabase(false)
+                .imageUrls(imageUrls)
                 .build();
     }
 
