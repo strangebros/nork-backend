@@ -94,4 +94,51 @@
             number_of_visitors = number_of_visitors + 1
         where id = #{workspaceId}
     </update>
+
+    <!-- 직군 별 인기있는 워크스페이스 조회 -->
+    <select id="SearchByPosition">
+        <include refid="topThreeKeywords"></include>
+
+        SELECT
+        w.id,
+        w.name,
+        w.category,
+        w.latitude,
+        w.longitude,
+        w.road_address,
+        w.rating,
+        w.number_of_visitors,
+        w.poi_id,
+        vs.recent_visit_datetime as recentVisitedDate,
+        GROUP_CONCAT(ttk.value ORDER BY ttk.value) as keywords
+        FROM (
+        SELECT
+        vr.workspace_id
+        FROM (
+        SELECT
+        m.id as member_id
+        FROM
+        member m
+        WHERE
+        m.position = #{position}
+        ) as m
+        LEFT JOIN
+        visited_review vr on m.member_id = vr.member_id
+        GROUP BY
+        vr.workspace_id
+        ORDER BY
+        AVG(vr.rating) DESC
+        LIMIT 5
+        ) as top_vr
+        LEFT JOIN
+        workspace w on top_vr.workspace_id = w.id
+        LEFT JOIN
+        visited_space vs on top_vr.workspace_id = vs.workspace_id
+        AND vs.member_id = #{memberId}
+        LEFT JOIN
+        topThreeKeywords ttk on top_vr.workspace_id = ttk.workspace_id
+        GROUP BY
+        w.id,
+        vs.recent_visit_datetime;
+    </select>
 </mapper>
