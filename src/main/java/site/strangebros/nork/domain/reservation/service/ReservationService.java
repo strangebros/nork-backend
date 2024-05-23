@@ -121,6 +121,7 @@ public class ReservationService {
                 .id(reservation.getId())
                 .memberId(reservation.getMemberId())
                 .workspaceId(reservation.getWorkspaceId())
+                .workspaceName(reservation.getWorkspaceName())
                 .visitStartDate(reservation.getVisitStartDate())
                 .visitTimeslot(reservation.getVisitTimeslot())
                 .activity(reservation.getActivity())

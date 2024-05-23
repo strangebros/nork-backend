@@ -18,6 +18,7 @@ public class Review {
     private int id;
     private int memberId;
     private int workspaceId;
+    private String workspaceName;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime startDatetime;
@@ -36,10 +37,13 @@ public class Review {
     private List<Integer> keywords = new ArrayList<>();
 
     @Builder
-    public Review(int id, int memberId,  int workspaceId,LocalDateTime startDatetime, LocalDateTime endDatetime, String activity, Double rating, String reviewText, List<String> images, List<Integer> keywords) {
+    public Review(int id, int memberId, int workspaceId, String workspaceName, LocalDateTime startDatetime,
+                  LocalDateTime endDatetime, String activity, Double rating, String reviewText, List<String> images,
+                  List<Integer> keywords) {
         this.id = id;
         this.memberId = memberId;
         this.workspaceId = workspaceId;
+        this.workspaceName = workspaceName;
         this.startDatetime = startDatetime;
         this.endDatetime = endDatetime;
         this.activity = activity;

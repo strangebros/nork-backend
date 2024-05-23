@@ -151,6 +151,7 @@ public class ReviewService {
                 .id(review.getId())
                 .memberId(review.getMemberId())
                 .workspaceId(review.getWorkspaceId())
+                .workspaceName(review.getWorkspaceName())
                 .startDatetime(review.getStartDatetime())
                 .endDatetime(review.getEndDatetime())
                 .activity(review.getActivity())

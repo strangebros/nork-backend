@@ -16,6 +16,7 @@ public class ReadResponse {
     private int id;
     private int memberId;
     private int workspaceId;
+    private String workspaceName;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime startDatetime;

@@ -15,6 +15,7 @@ public class Reservation {
     private int id;
     private int memberId;
     private int workspaceId;
+    private String workspaceName;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate visitStartDate;
@@ -23,10 +24,12 @@ public class Reservation {
     private int activityDuration;
 
     @Builder
-    public Reservation(int id, int memberId, int workspaceId, LocalDate visitStartDate, String visitTimeslot, String activity, int activityDuration) {
+    public Reservation(int id, int memberId, int workspaceId, String workspaceName, LocalDate visitStartDate,
+                       String visitTimeslot, String activity, int activityDuration) {
         this.id = id;
         this.memberId = memberId;
         this.workspaceId = workspaceId;
+        this.workspaceName = workspaceName;
         this.visitStartDate = visitStartDate;
         this.visitTimeslot = visitTimeslot;
         this.activity = activity;

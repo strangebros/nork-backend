@@ -12,14 +12,16 @@ public class MemberResponse {
     private String email;
     private String nickname;
     private String profileImage;
+    private String position;
     private String role;
 
     @Builder
-    public MemberResponse(int id, String email, String nickname, String profileImage, String role) {
+    public MemberResponse(int id, String email, String nickname, String profileImage, String position, String role) {
         this.id = id;
         this.email = email;
         this.nickname = nickname;
         this.profileImage = profileImage;
+        this.position = position;
         this.role = role;
     }
 
@@ -28,6 +30,7 @@ public class MemberResponse {
                 .id(member.getId())
                 .email(member.getEmail())
                 .nickname(member.getNickname())
+                .position(member.getPosition())
                 .profileImage(member.getProfileImage())
                 .role(member.getRole())
                 .build();

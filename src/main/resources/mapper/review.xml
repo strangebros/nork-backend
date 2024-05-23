@@ -20,6 +20,7 @@
         select vr.review_id as review_id,
                vr.member_id,
                vr.workspace_id,
+               w.name as workspace_name
                vr.start_datetime,
                vr.end_datetime,
                vr.activity,
@@ -42,7 +43,7 @@
               and vr.workspace_id = #{readInfo.workspaceId}
               order by vr.start_datetime desc
                   limit #{count} offset #{offset}) as vr
-
+                left join workspace w on vr.workspace_id = w.id
                  left join visited_review_image vri on vr.review_id = vri.visited_review_id
                  left join review_keyword rk on vr.review_id = rk.visited_review_id
     </select>
@@ -52,6 +53,7 @@
         select vr.review_id as review_id,
                vr.member_id,
                vr.workspace_id,
+               w.name as workspace_name,
                vr.start_datetime,
                vr.end_datetime,
                vr.activity,
@@ -73,29 +75,30 @@
                   where vr.member_id = #{readInfo.memberId}
                   order by vr.start_datetime desc
                   limit #{count} offset #{offset}) as vr
-
+                 left join workspace w on vr.workspace_id = w.id
                  left join visited_review_image vri on vr.review_id = vri.visited_review_id
                  left join review_keyword rk on vr.review_id = rk.visited_review_id
     </select>
 
     <!-- 단일 리뷰 조회(업데이트 시 정보를 불러오기 위함) -->
     <select id="findByReviewId" parameterType="int" resultMap="reviewResultMap">
-        select
-            vr.id as review_id,
-            vr.member_id,
-            vr.workspace_id,
-            vr.start_datetime,
-            vr.end_datetime,
-            vr.activity,
-            vr.rating,
-            vr.review_text,
-            vri.id as image_id,
-            vri.image,
-            rk.id as review_keyword_id,
-            rk.keyword_id
+        select vr.id  as review_id,
+               vr.member_id,
+               vr.workspace_id,
+               w.name as workspace_name,
+               vr.start_datetime,
+               vr.end_datetime,
+               vr.activity,
+               vr.rating,
+               vr.review_text,
+               vri.id as image_id,
+               vri.image,
+               rk.id  as review_keyword_id,
+               rk.keyword_id
         from visited_review vr
-        left join visited_review_image vri on vr.id = vri.visited_review_id
-        left join review_keyword rk on vr.id = rk.visited_review_id
+                 left join workspace w on vr.workspace_id = w.id
+                 left join visited_review_image vri on vr.id = vri.visited_review_id
+                 left join review_keyword rk on vr.id = rk.visited_review_id
         where vr.id = #{reviewId}
     </select>
 
@@ -114,6 +117,7 @@
         <id property="id" column="review_id"/>
         <result property="memberId" column="member_id"/>
         <result property="workspaceId" column="workspace_id"/>
+        <result property="workspaceName" column="workspace_name"/>
         <result property="startDatetime" column="start_datetime"/>
         <result property="endDatetime" column="end_datetime"/>
         <result property="activity" column="activity"/>
