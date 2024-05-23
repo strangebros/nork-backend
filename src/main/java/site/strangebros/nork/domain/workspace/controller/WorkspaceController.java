@@ -7,19 +7,14 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import site.strangebros.nork.domain.workspace.service.WorkspaceService;
 import site.strangebros.nork.domain.workspace.service.dto.request.PoiToWorkspaceRequest;
 import site.strangebros.nork.domain.workspace.service.dto.request.SearchOneWorkspaceRequest;
 import site.strangebros.nork.domain.workspace.service.dto.request.SearchWorkspaceRequest;
 import site.strangebros.nork.domain.workspace.service.dto.response.SearchOneWorkspaceResponse;
+import site.strangebros.nork.domain.workspace.service.dto.response.SearchPopularWorkspaceResponse;
 import site.strangebros.nork.domain.workspace.service.dto.response.SearchWorkspaceResponse;
 import site.strangebros.nork.global.auth.config.CurrentMember;
 import site.strangebros.nork.global.web.dto.response.SuccessResponse;
@@ -63,6 +58,14 @@ public class WorkspaceController {
                         .path("/{id}").build(workspaceId)
                         .toURL().toURI())
                 .body(SuccessResponse.created());
+    }
+
+    // 포지션 별 인기있는 장소 조회
+    @GetMapping("/popular")
+    public SuccessResponse<List<SearchPopularWorkspaceResponse>> searchPopularWorkspace(@RequestParam("position") String position, @CurrentMember int memberId){
+        List<SearchPopularWorkspaceResponse> popularWorkspaces = workspaceService.searchPopularWorkspace(position, memberId);
+
+        return SuccessResponse.ok(popularWorkspaces);
     }
 
 }
