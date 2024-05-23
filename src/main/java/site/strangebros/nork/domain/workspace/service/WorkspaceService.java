@@ -98,14 +98,13 @@ public class WorkspaceService {
                 .poiId(request.getPoiId())
                 .build();
         Workspace workspace = workspaceMapper.findOneByPoiId(queryDto);
+        List<String> imageUrls = naverImageSearchClient.getImageUrls(poi.getRoadAddress() + " " + poi.getName());
 
         if (workspace == null) {
-            return SearchOneWorkspaceResponse.buildWithoutWorkspace(poi);
+            return SearchOneWorkspaceResponse.buildWithoutWorkspace(poi, imageUrls);
         }
 
-        List<String> imageUrls = naverImageSearchClient.getImageUrls(poi.getRoadAddress() + " " + poi.getName());
         List<CurrentWorker> currentWorkers = currentWorkerService.getWorkersOfWorkspace(workspace.getId());
-
         return SearchOneWorkspaceResponse.buildWithWorkspace(poi, workspace, imageUrls, currentWorkers);
     }
 

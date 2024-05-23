@@ -13,6 +13,7 @@ import site.strangebros.nork.domain.review.service.dto.request.ReadRequest;
 import site.strangebros.nork.domain.review.service.dto.request.UpdateRequest;
 import site.strangebros.nork.domain.review.service.dto.response.ReadResponse;
 import site.strangebros.nork.domain.workspace.entity.WorkspaceKeyword;
+import site.strangebros.nork.domain.workspace.mapper.VisitedSpaceMapper;
 import site.strangebros.nork.domain.workspace.mapper.WorkspaceKeywordMapper;
 import site.strangebros.nork.domain.workspace.mapper.WorkspaceMapper;
 
@@ -28,6 +29,7 @@ public class ReviewService {
     private final ReviewKewordMapper reviewKewordMapper;
     private final WorkspaceMapper workspaceMapper;
     private final WorkspaceKeywordMapper workspaceKeywordMapper;
+    private final VisitedSpaceMapper visitedSpaceMapper;
 
     @Transactional
     public void createReview(CreateRequest createRequest, Integer memberId) {
@@ -67,6 +69,15 @@ public class ReviewService {
 
         // 워크스페이스에서 rating 과 number_of_visitors 수정
         workspaceMapper.updateRatingAndNumberOfVisitors(createInfo.getWorkspaceId(), createInfo.getRating());
+
+        // visited_space에 최근 방문 일자 업데이트
+        Integer visitedSpaceId = visitedSpaceMapper.findByMemberIdAndWorkspaceId(createInfo.getMemberId(), createInfo.getWorkspaceId());
+        if( visitedSpaceId == null){
+            visitedSpaceMapper.createVisitedSpace(createInfo.getMemberId(), createInfo.getWorkspaceId(), createInfo.getStartDatetime());
+        }
+        else{
+            visitedSpaceMapper.updateVisitedSpace(visitedSpaceId, createInfo.getStartDatetime());
+        }
     }
 
     // 리뷰 조회
@@ -152,10 +163,18 @@ public class ReviewService {
 
     // 리뷰 업데이트
     public void updateReview(int reviewId, UpdateRequest updateRequest) {
+        // 기존 review 값 가져와놓기
+        Review exReview = reviewMapper.findByReviewId(reviewId);
+        int workspaceId = exReview.getWorkspaceId();
+        Double oldRating = exReview.getRating();
+
         // Review Entity로 변경
         Review updateInfo = updateRequest.toReview(reviewId);
 
         // DB에 저장
         reviewMapper.update(updateInfo);
+
+        // 워크스페이스의 rating 수정하기
+        workspaceMapper.updateRating(workspaceId, oldRating, updateInfo.getRating());
     }
 }

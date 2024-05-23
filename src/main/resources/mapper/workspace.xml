@@ -95,6 +95,7 @@
         where id = #{workspaceId}
     </update>
 
+
     <!-- 직군 별 인기있는 워크스페이스 조회 -->
     <select id="SearchByPosition" parameterType="map" resultType="site.strangebros.nork.domain.workspace.entity.Workspace">
         SELECT
@@ -144,4 +145,11 @@
             w.id,
             vs.recent_visit_datetime
     </select>
+
+    <update id="updateRating" >
+        update workspace
+        set rating = ((rating * number_of_visitors) - #{oldRating} + #{newRating}) / (number_of_visitors)
+        where id = #{workspaceId}
+    </update>
+
 </mapper>
