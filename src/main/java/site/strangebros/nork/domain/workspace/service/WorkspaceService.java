@@ -4,13 +4,17 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toMap;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import site.strangebros.nork.domain.currentWorker.entity.CurrentWorker;
 import site.strangebros.nork.domain.currentWorker.service.CurrentWorkerService;
+import site.strangebros.nork.domain.keyword.entity.Keyword;
 import site.strangebros.nork.domain.workspace.entity.Workspace;
 import site.strangebros.nork.domain.workspace.mapper.WorkspaceMapper;
 import site.strangebros.nork.domain.workspace.mapper.dto.WorkspaceCreateQueryDto;
@@ -25,6 +29,7 @@ import site.strangebros.nork.domain.workspace.service.dto.request.PoiToWorkspace
 import site.strangebros.nork.domain.workspace.service.dto.request.SearchOneWorkspaceRequest;
 import site.strangebros.nork.domain.workspace.service.dto.request.SearchWorkspaceRequest;
 import site.strangebros.nork.domain.workspace.service.dto.response.SearchOneWorkspaceResponse;
+import site.strangebros.nork.domain.workspace.service.dto.response.SearchPopularWorkspaceResponse;
 import site.strangebros.nork.domain.workspace.service.dto.response.SearchWorkspaceResponse;
 
 @RequiredArgsConstructor
@@ -129,5 +134,30 @@ public class WorkspaceService {
 
         workspaceMapper.create(queryDto);
         return queryDto.getId();
+    }
+
+    public List<SearchPopularWorkspaceResponse> searchPopularWorkspace(String position, int memberId) {
+        List<Workspace> popularWorkspaces = workspaceMapper.SearchByPosition(position, memberId);
+
+        return popularWorkspaces.stream()
+                .map(this::convertToSearchPopularWorkspaceResponse)
+                .collect(Collectors.toList());
+    }
+
+    public SearchPopularWorkspaceResponse convertToSearchPopularWorkspaceResponse(Workspace workspace){
+        List<String> keywords = workspace.getKeywords() != null ? workspace.getKeywords().stream().map(Keyword::getValue).collect(Collectors.toList()) : Collections.emptyList();
+
+        return SearchPopularWorkspaceResponse.builder()
+                .id(workspace.getId())
+                .name(workspace.getName())
+                .category(workspace.getCategory())
+                .latitude(workspace.getLatitude())
+                .longitude(workspace.getLongitude())
+                .roadAddress(workspace.getRoadAddress())
+                .rating(workspace.getRating())
+                .poiId(workspace.getPoiId())
+                .recentVisitedDate(workspace.getRecentVisitDatetime())
+                .keywords(keywords)
+                .build();
     }
 }
