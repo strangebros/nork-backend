@@ -20,7 +20,7 @@
         select vr.review_id as review_id,
                vr.member_id,
                vr.workspace_id,
-               w.name as workspace_name
+               w.name as workspace_name,
                vr.start_datetime,
                vr.end_datetime,
                vr.activity,
