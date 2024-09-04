@@ -1,21 +1,12 @@
-## 팀원 구성
-| [<img src="https://github.com/gmelon.png" width="150px">](https://github.com/gmelon) | [<img src="https://github.com/sootudio.png" width="150px">](https://github.com/sootudio) |
-| :---: | :---: |
-| [현상혁](https://github.com/gmelon) | [김수영](https://github.com/kswim57) |
-
-<br />
-
 # ✈ 맞춤형 워크스페이스 추천 앱 nork
 ![nork_wallpaper](https://github.com/user-attachments/assets/d4e12d44-5353-4bfb-a77c-5bfd6eee9efe)
 
 <br />
 
-## 목차
-- [프로젝트 소개](#프로젝트-소개)
-- [주요 스크린샷](#주요-스크린샷)
-- [ERD](#erd)
-- [사용법](#사용법)
-- [연락처](#연락처)
+## 팀원 구성
+| [<img src="https://github.com/gmelon.png" width="150px">](https://github.com/gmelon) | [<img src="https://github.com/sootudio.png" width="150px">](https://github.com/sootudio) |
+| :---: | :---: |
+| [현상혁](https://github.com/gmelon) | [김수영](https://github.com/kswim57) |
 
 <br />
 
