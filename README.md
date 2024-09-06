@@ -6,7 +6,7 @@
 ## 팀원 구성
 | [<img src="https://github.com/gmelon.png" width="150px">](https://github.com/gmelon) | [<img src="https://github.com/sootudio.png" width="150px">](https://github.com/sootudio) |
 | :---: | :---: |
-| [현상혁](https://github.com/gmelon) | [김수영](https://github.com/kswim57) |
+| [현상혁](https://github.com/gmelon) | [김수영](https://github.com/sootudio) |
 
 <br />
 
@@ -22,11 +22,26 @@
 
 ### **Frontend**
 
+- Vue.js
+- html
+- css
+- javascript
+- tailwind
+
 ### **Backend**
 
-### **Devops**
+- Spring boot
+- MyBatis
+
+### **Database**
+
+- MySQL
+- Redis
 
 ### **Cooperation**
+
+- Github
+- Notion
 
 <br />
 
