@@ -17,7 +17,7 @@
 
     <!-- 유저의 특정 장소에 대한 모든 리뷰 불러오기 -->
     <select id="findByMemberIdAndWorkspaceId" parameterType="map" resultMap="reviewResultMap">
-        select vr.review_id as review_id,
+        select vr.id as review_id,
                vr.member_id,
                vr.workspace_id,
                w.name as workspace_name,
@@ -30,27 +30,19 @@
                vri.image,
                rk.id        as review_keyword_id,
                rk.keyword_id
-        from (select vr.id as review_id,
-                     vr.member_id,
-                     vr.workspace_id,
-                     vr.start_datetime,
-                     vr.end_datetime,
-                     vr.activity,
-                     vr.rating,
-                     vr.review_text
-              from visited_review vr
-              where vr.member_id = #{readInfo.memberId}
-              and vr.workspace_id = #{readInfo.workspaceId}
-              order by vr.start_datetime desc
-                  limit #{count} offset #{offset}) as vr
-                left join workspace w on vr.workspace_id = w.id
-                 left join visited_review_image vri on vr.review_id = vri.visited_review_id
-                 left join review_keyword rk on vr.review_id = rk.visited_review_id
+        from visited_review vr
+                 left join workspace w on vr.workspace_id = w.id
+                 left join visited_review_image vri on vr.id = vri.visited_review_id
+                 left join review_keyword rk on vr.id = rk.visited_review_id
+        where vr.member_id = #{readInfo.memberId}
+          and vr.workspace_id = #{readInfo.workspaceId}
+        order by vr.start_datetime desc
+            limit #{count} offset #{offset};
     </select>
 
     <!-- 유저의 모든 리뷰 불러오기 (모든 장소에 대한) -->
     <select id="findByMemberId" parameterType="map" resultMap="reviewResultMap">
-        select vr.review_id as review_id,
+        select vr.id as review_id,
                vr.member_id,
                vr.workspace_id,
                w.name as workspace_name,
@@ -63,21 +55,13 @@
                vri.image,
                rk.id        as review_keyword_id,
                rk.keyword_id
-        from (select vr.id as review_id,
-                     vr.member_id,
-                     vr.workspace_id,
-                     vr.start_datetime,
-                     vr.end_datetime,
-                     vr.activity,
-                     vr.rating,
-                     vr.review_text
-                  from visited_review vr
-                  where vr.member_id = #{readInfo.memberId}
-                  order by vr.start_datetime desc
-                  limit #{count} offset #{offset}) as vr
+        from visited_review vr
+                 left join visited_review_image vri on vr.id = vri.visited_review_id
+                 left join review_keyword rk on vr.id = rk.visited_review_id
                  left join workspace w on vr.workspace_id = w.id
-                 left join visited_review_image vri on vr.review_id = vri.visited_review_id
-                 left join review_keyword rk on vr.review_id = rk.visited_review_id
+        where vr.member_id = #{readInfo.memberId}
+        order by vr.start_datetime desc
+            limit #{count} offset #{offset};
     </select>
 
     <!-- 단일 리뷰 조회(업데이트 시 정보를 불러오기 위함) -->
