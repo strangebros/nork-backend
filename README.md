@@ -1,5 +1,5 @@
-# ✈ 맞춤형 워크스페이스 추천 앱 nork
-![nork_wallpaper](https://github.com/user-attachments/assets/d4e12d44-5353-4bfb-a77c-5bfd6eee9efe)
+# ✈ 공공데이터 기반 맞춤형 워크스페이스 추천 앱, 'nork'
+![Frame 1618872747](https://github.com/user-attachments/assets/f2548e0f-9e77-4fa1-a5a1-0037c1046793)
 
 <br />
 
@@ -7,6 +7,7 @@
 | [<img src="https://github.com/gmelon.png" width="150px">](https://github.com/gmelon) | [<img src="https://github.com/sootudio.png" width="150px">](https://github.com/sootudio) |
 | :---: | :---: |
 | [현상혁](https://github.com/gmelon) | [김수영](https://github.com/sootudio) |
+| 풀스택 개발자 | 풀스택 개발자 |
 
 <br />
 
@@ -51,6 +52,11 @@ https://sootudio2.notion.site/4fc2c63ba80a48bbbca0416a8c1a1a3f?pvs=4
 ## ERD
 ![image](https://github.com/user-attachments/assets/c42868b5-6673-48c6-ab24-cd396d9ec16c)
 
+
+<br />
+
+## 아키텍쳐
+![Frame 557](https://github.com/user-attachments/assets/5fcd5640-6c44-41c5-a6cc-e8e58e141dbe)
 
 <br />
 
